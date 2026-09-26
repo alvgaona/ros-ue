@@ -1,9 +1,10 @@
 #!/bin/sh
-# Builds Cyclone DDS and the message types (msg/*.idl) as static libraries under ThirdParty/.
+# Builds Cyclone DDS and the ROS 2 message types as static libraries under ThirdParty/.
 set -eu
 cd "$(dirname "$0")"
 
 VERSION=0.10.5 # the Cyclone DDS that ROS 2 Jazzy ships
+PACKAGES="builtin_interfaces std_msgs geometry_msgs nav_msgs sensor_msgs tf2_msgs rosgraph_msgs rcl_interfaces" # every message in these
 DDS="$PWD/ThirdParty/cyclonedds"
 MSGS="$PWD/ThirdParty/msgs"
 export MACOSX_DEPLOYMENT_TARGET=13.0 # ignored off macOS
@@ -26,7 +27,8 @@ if [ ! -f "$DDS/lib/libddsc.a" ]; then
 fi
 
 rm -rf "$MSGS" && mkdir -p "$MSGS"
-for idl in msg/*.idl; do
-  "$DDS/bin/idlc" -o "$MSGS" "$idl"
+python3 idl.py "$CONDA_PREFIX/share" "$MSGS" $PACKAGES
+for idl in "$MSGS"/*.idl; do
+  "$DDS/bin/idlc" -x final -f case-sensitive -o "$MSGS" "$idl" # ROS names like INT8 differ from IDL keywords only in case
 done
 (cd "$MSGS" && cc -O2 -fPIC -I "$DDS/include" -c ./*.c && ar rcs libmsgs.a ./*.o)

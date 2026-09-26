@@ -13,18 +13,19 @@ Unreal Engine 5 plugin, `RosBridge`, that talks to ROS 2 as a plain Cyclone DDS 
 ## Layout
 
 - `Source/RosBridge/Public/Ros.h` is the whole API: the `URos` game-instance subsystem, `TPublisher`, `TSubscription`, `ERosQos` and `ROS_MESSAGE`. `Private/Ros.cpp` sets up the participant and QoS, names topics and spins readers.
-- `Source/RosBridge/Public/RosMessages.h` registers message types, each with one include, one `ROS_MESSAGE` line and an `F<Type>Msg` alias.
+- `Source/RosBridge/Public/RosMessages.h` registers the message types the plugin uses, each with one include, one `ROS_MESSAGE` line and a short `F` alias.
 - `HelloRos` is `demo_nodes_cpp`'s talker and listener in one actor, and the end-to-end check.
-- `msg/*.idl` holds the message types, renamed the way ROS 2 names them on the wire.
-- `setup.sh`, run as `pixi run setup`, builds Cyclone DDS and `msg/` into `ThirdParty/`. That directory is generated and ignored; don't edit it.
+- `setup.sh`, run as `pixi run setup`, builds Cyclone DDS and every message in its `PACKAGES` into `ThirdParty/`. That directory is generated and ignored; don't edit it.
+- `idl.py` rewrites the IDL that ROS ships in the pixi environment (`share/<pkg>/msg/`) under the names ROS 2 uses on the wire. Never hand-write message IDL.
 
 ## Things that bite
 
-- ROS 2 matches on mangled names. The topic `/chatter` is `rt/chatter` on the wire (`URos::MakeTopic` adds the prefix), and `std_msgs/msg/String` is `std_msgs::msg::dds_::String_`. Get either wrong and nothing matches, with no error.
-- Keep `@final` in the IDL even though idlc 0.10.5 defaults to it. idlc warns the default may become appendable, and ROS 2 messages are final.
+- ROS 2 matches on mangled names. The topic `/chatter` is `rt/chatter` on the wire (`URos::MakeTopic` adds the prefix), and `std_msgs/msg/String` is `std_msgs::msg::dds_::String_` (`idl.py` renames it). Get either wrong and nothing matches, with no error.
+- Keep `-x final` in `setup.sh` even though idlc 0.10.5 defaults to it. idlc warns the default may become appendable, and ROS 2 messages are final.
 - The setup script skips Cyclone when `ThirdParty/cyclonedds/lib/libddsc.a` exists. After changing its version or CMake flags, delete `ThirdParty/cyclonedds` and rerun. `ThirdParty/msgs` is rebuilt on every run.
 - Dropping the pointer that `CreatePublisher` or `CreateSubscription` returns deletes the endpoint, since `URos` keeps only weak pointers. Hold it in a member and reset it in `EndPlay`, as `HelloRos` does.
 - Cyclone serializes a sample inside `dds_write`, so message fields can point at temporaries such as `TCHAR_TO_UTF8`.
+- ROS nodes on Cyclone log `Failed to parse type hash` once per Unreal endpoint, because the plugin sends no type hash in USER_DATA. It is harmless; topics still match.
 - Unreal reads `ROS_DOMAIN_ID` from its own environment. On macOS an editor launched from the Dock doesn't inherit the shell's and runs on domain 0.
 
 ## Verifying changes

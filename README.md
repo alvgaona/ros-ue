@@ -9,7 +9,7 @@ Topics work with ROS 2 running either Cyclone DDS or Fast DDS. Only macOS and Li
 You need [pixi](https://pixi.sh) and the compiler Unreal uses (Xcode on macOS, clang on Linux).
 
 ```sh
-pixi run setup   # builds Cyclone DDS and msg/*.idl as static libraries into ThirdParty/
+pixi run setup   # builds Cyclone DDS and the ROS message types as static libraries into ThirdParty/
 ```
 
 Put this folder in a C++ project's `Plugins/` folder (for example `Plugins/RosBridge`), open the project and let it build.
@@ -25,6 +25,6 @@ pixi run talker     # Unreal logs "I heard: [...]"
 
 ## Adding a message type
 
-1. Copy the type's IDL from a ROS install (`share/<pkg>/msg/<Type>.idl`) to `msg/<pkg>_<Type>.idl`, along with the types it uses. Wrap it in `module dds_`, add `_` to the struct name and mark it `@final`, as in `msg/std_msgs_String.idl`.
-2. Run `pixi run setup`.
-3. Add its include and a `ROS_MESSAGE` line to `Source/RosBridge/Public/RosMessages.h`.
+`pixi run setup` generates every message in the packages listed in `setup.sh`, from the IDL that ROS ships in the pixi environment. To use one, add `#include "<pkg>_<Type>.h"` and a `ROS_MESSAGE` line to `Source/RosBridge/Public/RosMessages.h`.
+
+For a package that isn't listed, run `pixi add ros-jazzy-<pkg>`, add it to `PACKAGES` in `setup.sh` and run `pixi run setup` again.
