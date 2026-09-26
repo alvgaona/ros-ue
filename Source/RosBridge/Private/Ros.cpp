@@ -29,6 +29,16 @@ dds_entity_t URos::MakeTopic(const dds_topic_descriptor_t* Type, const FString& 
 	return dds_create_topic(Participant, Type, TCHAR_TO_UTF8(*Name), nullptr, nullptr);
 }
 
+TUniquePtr<dds_qos_t, FQosDeleter> URos::QosOf(ERosQos Qos, const char* TypeHash) const
+{
+	// ROS 2 nodes read the type hash from USER_DATA and warn when it's missing
+	dds_qos_t* Copy = dds_create_qos();
+	dds_copy_qos(Copy, Qos == ERosQos::SensorData ? SensorDataQos : ReliableQos);
+	const FTCHARToUTF8 UserData(*FString::Printf(TEXT("typehash=%s;"), UTF8_TO_TCHAR(TypeHash)));
+	dds_qset_userdata(Copy, UserData.Get(), UserData.Length());
+	return TUniquePtr<dds_qos_t, FQosDeleter>(Copy);
+}
+
 void URos::Tick(float)
 {
 	// Index loop and a pinned pointer, because a callback may create or drop subscriptions.

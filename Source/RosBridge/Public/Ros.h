@@ -10,11 +10,16 @@ THIRD_PARTY_INCLUDES_END
 
 #include "Ros.generated.h"
 
-// Maps an idlc-generated message struct to its type descriptor.
+// Maps an idlc-generated message struct to its type descriptor and its ROS 2 type hash.
 template<class T> const dds_topic_descriptor_t* TypeOf();
-#define ROS_MESSAGE(T) template<> inline const dds_topic_descriptor_t* TypeOf<T>() { return &T##_desc; }
+template<class T> const char* TypeHashOf();
+#define ROS_MESSAGE(T) \
+	template<> inline const dds_topic_descriptor_t* TypeOf<T>() { return &T##_desc; } \
+	template<> inline const char* TypeHashOf<T>() { return T##_typehash; }
 
 enum class ERosQos { Reliable, SensorData };
+
+struct FQosDeleter { void operator()(dds_qos_t* Qos) const { dds_delete_qos(Qos); } };
 
 struct FRosEntity
 {
@@ -66,14 +71,14 @@ public:
 	template<class T>
 	TSharedRef<TPublisher<T>> CreatePublisher(const FString& Topic, ERosQos Qos = ERosQos::Reliable)
 	{
-		return MakeShared<TPublisher<T>>(dds_create_writer(Participant, MakeTopic(TypeOf<T>(), Topic), QosOf(Qos), nullptr));
+		return MakeShared<TPublisher<T>>(dds_create_writer(Participant, MakeTopic(TypeOf<T>(), Topic), QosOf(Qos, TypeHashOf<T>()).Get(), nullptr));
 	}
 
 	template<class T>
 	TSharedRef<TSubscription<T>> CreateSubscription(const FString& Topic, TFunction<void(const T&)> Callback, ERosQos Qos = ERosQos::Reliable)
 	{
 		auto Sub = MakeShared<TSubscription<T>>(
-			dds_create_reader(Participant, MakeTopic(TypeOf<T>(), Topic), QosOf(Qos), nullptr), MoveTemp(Callback));
+			dds_create_reader(Participant, MakeTopic(TypeOf<T>(), Topic), QosOf(Qos, TypeHashOf<T>()).Get(), nullptr), MoveTemp(Callback));
 		Spinning.Add(Sub);
 		return Sub;
 	}
@@ -89,7 +94,7 @@ public:
 
 private:
 	dds_entity_t MakeTopic(const dds_topic_descriptor_t* Type, const FString& Topic);
-	const dds_qos_t* QosOf(ERosQos Qos) const { return Qos == ERosQos::SensorData ? SensorDataQos : ReliableQos; }
+	TUniquePtr<dds_qos_t, FQosDeleter> QosOf(ERosQos Qos, const char* TypeHash) const;
 
 	dds_entity_t Participant = 0;
 	dds_qos_t* ReliableQos = nullptr;

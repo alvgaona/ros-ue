@@ -1,5 +1,6 @@
 # Rewrites ROS 2 message IDL for idlc under the names ROS 2 uses on the wire (std_msgs::msg::dds_::String_).
 # Usage: idl.py <share dir> <out dir> <package>...
+import json
 import re
 import sys
 from pathlib import Path
@@ -20,7 +21,11 @@ for package in packages:
         for kind, name, size in re.findall(r"typedef (\S+) (\w+)(\[\d+\]);", idl):
             idl = idl.replace(f"typedef {kind} {name}{size};", "")
             idl = re.sub(rf"\b{name} (\w+);", rf"{kind} \1{size};", idl)
+        # ROS 2 nodes warn about endpoints whose USER_DATA lacks this hash
+        hashes = json.loads(src.with_suffix(".json").read_text())["type_hashes"]
+        type_hash = next(h["hash_string"] for h in hashes if h["type_name"] == f"{package}/msg/{src.stem}")
+        dds = f'module msg {{ module dds_ {{ const string {src.stem}__typehash = "{type_hash}";'
         # The file ends in closing braces, so one more closes dds_. ROS's IDL has no include guards.
         guard = f"{package}_{src.stem}_idl"
-        idl = f"#ifndef {guard}\n#define {guard}\n" + idl.replace("module msg {", "module msg { module dds_ {", 1) + "};\n#endif\n"
+        idl = f"#ifndef {guard}\n#define {guard}\n" + idl.replace("module msg {", dds, 1) + "};\n#endif\n"
         Path(out, f"{package}_{src.name}").write_text(idl)
