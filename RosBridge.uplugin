@@ -1,0 +1,16 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "0.1.0",
+  "FriendlyName": "ROS Bridge",
+  "Description": "Talks to ROS 2 over DDS without being a ROS 2 node.",
+  "Category": "Robotics",
+  "CanContainContent": false,
+  "Modules": [
+    {
+      "Name": "RosBridge",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ]
+}
