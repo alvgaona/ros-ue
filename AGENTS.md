@@ -26,17 +26,29 @@ Unreal Engine 5 plugin, `RosBridge`, that talks to ROS 2 as a plain Cyclone DDS 
 - Dropping the pointer that `CreatePublisher` or `CreateSubscription` returns deletes the endpoint, since `URos` keeps only weak pointers. Hold it in a member and reset it in `EndPlay`, as `HelloRos` does.
 - Cyclone serializes a sample inside `dds_write`, so message fields can point at temporaries such as `TCHAR_TO_UTF8`.
 - ROS nodes on Cyclone log `Failed to parse type hash` once per Unreal endpoint, because the plugin sends no type hash in USER_DATA. It is harmless; topics still match.
-- Unreal reads `ROS_DOMAIN_ID` from its own environment. On macOS an editor launched from the Dock doesn't inherit the shell's and runs on domain 0.
+- On macOS, Unreal started as its own app (Dock, Epic launcher) needs Local Network access, or ROS never sees it, although `HelloRos` still hears itself. Started from a terminal, it uses the terminal's access and inherits the shell's `ROS_DOMAIN_ID`; from the Dock it runs on domain 0. To see what Cyclone does inside Unreal, point `CYCLONEDDS_URI` at a tracing config; `open --env` passes it to an app launch.
+- When one shell's ROS tools see nothing while others do, suspect that shell, not Unreal. On 2026-09-26 a fresh shell fixed exactly that. A healthy participant answers a new participant's multicast hello within milliseconds. `tcpdump` shows the multicast on `en0` and the replies on `lo0`, and needs no sudo on Alvaro's Mac.
+- UE 5.8's build accelerator (UBA) loses the object files when the plugin folder is a symlink, and the link fails with `no such file or directory`. The host project turns it off with `bAllowUBAExecutor` set to false in its own `Saved/UnrealBuildTool/BuildConfiguration.xml`. `AdditionalPluginDirectories` is no way around it, since it only finds plugins one folder down and this repo is the plugin folder.
+- Game time in the headless run below went about five times faster than the wall clock (170 `HelloRos` messages in 30 seconds), so don't read timing from that mode.
 
 ## Verifying changes
 
-There is no test suite. Build in a host project and run the README's hello world against `pixi run listener` and `pixi run talker`. Fast DDS is supported too, so repeat the listener against it:
+There is no test suite. The host project on Alvaro's machine is `~/Documents/Unreal Projects/RosBridgeHost`, a blank C++ project with this repo symlinked as `Plugins/RosBridge`. Build it from the command line, then run the hello world without a window:
+
+```sh
+UE="/Users/Shared/Epic Games/UE_5.8/Engine"
+HOST="$HOME/Documents/Unreal Projects/RosBridgeHost/RosBridgeHost.uproject"
+"$UE/Build/BatchFiles/Mac/Build.sh" RosBridgeHostEditor Mac Development -Project="$HOST"
+"$UE/Binaries/Mac/UnrealEditor.app/Contents/MacOS/UnrealEditor" "$HOST" /Engine/Maps/Entry -game -nullrhi -unattended -stdout -ExecCmds="summon /Script/RosBridge.HelloRos"
+```
+
+While it runs, `pixi run listener` should print Unreal's messages, and messages from `pixi run talker` should show up in Unreal's log as `I heard`. Fast DDS is supported too, so repeat both against it:
 
 ```sh
 pixi run env RMW_IMPLEMENTATION=rmw_fastrtps_cpp ros2 run demo_nodes_cpp listener
 ```
 
-The pixi environment sets `RMW_IMPLEMENTATION=rmw_cyclonedds_cpp` over the shell's value, hence `env` after activation. Unreal never shows in `ros2 node list`, since it isn't a node. Its endpoints appear in `pixi run ros2 topic info /chatter -v` under `_NODE_NAME_UNKNOWN_`.
+The pixi environment sets `RMW_IMPLEMENTATION=rmw_cyclonedds_cpp` over the shell's value, hence `env` after activation. Unreal never shows in `ros2 node list`, since it isn't a node. Its endpoints appear in `pixi run ros2 topic info /chatter -v` under `_CREATED_BY_BARE_DDS_APP_`. The first `ros2 topic` call starts the ROS daemon and can answer before it has discovered Unreal, so run it twice or add `--no-daemon --spin-time 3`.
 
 ## Style
 
