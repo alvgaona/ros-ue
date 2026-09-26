@@ -7,7 +7,8 @@ Unreal Engine 5 plugin, `RosBridge`, that talks to ROS 2 as a plain Cyclone DDS 
 - It is not a ROS 2 node and must not become one. Don't add rclcpp, rcl or rmw. Building it needs no ROS install, and ROS in `pixi.toml` is only the test peer.
 - The API follows rclcpp's shape and names, and each `ERosQos` profile copies an rclcpp one.
 - Callbacks run on the game thread because `URos::Tick` drains every reader each frame. Don't move them to DDS listeners, which fire on Cyclone's threads.
-- Cyclone DDS is linked statically and pinned in `setup.sh` to 0.10.5, the release ROS 2 Jazzy ships. Move the pin with the distro in `pixi.toml`.
+- Cyclone DDS is linked statically and pinned in `setup.sh` to 0.10.5, the release Humble, Jazzy and Kilted ship. Lyrical ships Cyclone 11, which talks to it fine.
+- `pixi.toml` has one environment per distro. The default is Jazzy, the source of the generated messages, so `setup` exists only there; Humble ships no type hashes, which `idl.py` needs. `humble`, `kilted` and `lyrical` are test peers only.
 - macOS arm64 and Linux x86_64 only, the platforms in `pixi.toml`.
 
 ## Layout
@@ -27,6 +28,8 @@ Unreal Engine 5 plugin, `RosBridge`, that talks to ROS 2 as a plain Cyclone DDS 
 - Cyclone serializes a sample inside `dds_write`, so message fields can point at temporaries such as `TCHAR_TO_UTF8`.
 - Every endpoint sends its ROS 2 type hash in USER_DATA as `typehash=RIHS01_…;`. `idl.py` takes the hash from the `.json` next to each IDL file, and `ROS_MESSAGE` exposes it. Without it, ROS nodes on Cyclone log `Failed to parse type hash` and `ros2 topic info -v` shows `INVALID`, though topics still match.
 - On macOS, Unreal started as its own app (Dock, Epic launcher) needs Local Network access, or ROS never sees it, although `HelloRos` still hears itself. Started from a terminal, it uses the terminal's access and inherits the shell's `ROS_DOMAIN_ID`; from the Dock it runs on domain 0. To see what Cyclone does inside Unreal, point `CYCLONEDDS_URI` at a tracing config; `open --env` passes it to an app launch.
+- The macOS firewall asks once for every new binary that receives network traffic, and each pixi environment has its own talker, listener and python. Until someone clicks Allow, that process hears nothing, which looks like a discovery bug.
+- Messages come from Jazzy and are the same on the wire in Humble through Lyrical, except `sensor_msgs/Range`, which gained `variance` after Humble. Lyrical dropped `geometry_msgs/Pose2D`.
 - When one shell's ROS tools see nothing while others do, suspect that shell, not Unreal. On 2026-09-26 a fresh shell fixed exactly that. A healthy participant answers a new participant's multicast hello within milliseconds. `tcpdump` shows the multicast on `en0` and the replies on `lo0`, and needs no sudo on Alvaro's Mac.
 - UE 5.8's build accelerator (UBA) loses the object files when the plugin folder is a symlink, and the link fails with `no such file or directory`. The host project turns it off with `bAllowUBAExecutor` set to false in its own `Saved/UnrealBuildTool/BuildConfiguration.xml`. `AdditionalPluginDirectories` is no way around it, since it only finds plugins one folder down and this repo is the plugin folder.
 - Game time in the headless run below went about five times faster than the wall clock (170 `HelloRos` messages in 30 seconds), so don't read timing from that mode.
@@ -48,7 +51,9 @@ While it runs, `pixi run listener` should print Unreal's messages, and messages 
 pixi run env RMW_IMPLEMENTATION=rmw_fastrtps_cpp ros2 run demo_nodes_cpp listener
 ```
 
-The pixi environment sets `RMW_IMPLEMENTATION=rmw_cyclonedds_cpp` over the shell's value, hence `env` after activation. Unreal never shows in `ros2 node list`, since it isn't a node. Its endpoints appear in `pixi run ros2 topic info /chatter -v` under `_CREATED_BY_BARE_DDS_APP_`. The first `ros2 topic` call starts the ROS daemon and can answer before it has discovered Unreal, so run it twice or add `--no-daemon --spin-time 3`.
+Every pixi environment sets `RMW_IMPLEMENTATION=rmw_cyclonedds_cpp` over the shell's value, hence `env` after activation. Unreal never shows in `ros2 node list`, since it isn't a node. Its endpoints appear in `pixi run ros2 topic info /chatter -v` under `_CREATED_BY_BARE_DDS_APP_`. The first `ros2 topic` call starts the ROS daemon and can answer before it has discovered Unreal, so run it twice or add `--no-daemon --spin-time 3`.
+
+Repeat against the other distros with `-e humble`, `-e kilted` and `-e lyrical` after `pixi run`. Lyrical's `demo_nodes_cpp` uses `example_interfaces/msg/String` instead of `std_msgs/msg/String`; its nodes still reach Unreal on Cyclone but not on Fast DDS. Test Lyrical with `pixi run -e lyrical ros2 topic echo /chatter std_msgs/msg/String` and `ros2 topic pub` instead. On 2026-09-26 all four distros passed both ways on both RMWs.
 
 ## Style
 
