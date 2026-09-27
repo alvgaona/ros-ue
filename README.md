@@ -67,6 +67,19 @@ The operating system caps what a socket can get. macOS allows about 7 MiB by def
 
 Publishing holds Unreal's game thread for about 0.45 ms per MB, 3 ms for a 1080p image. Over a network, bandwidth runs out first: gigabit Ethernet carries about 15 raw 1080p images a second.
 
+## Cameras
+
+A Ros Camera component publishes what it sees as `sensor_msgs/Image` in `bgr8`: by default 640×480 on `/camera/image_raw`, 30 images per second of sim time, in the frame `camera_optical_frame`. Add it to an actor in the editor (Add → Ros Camera) or in C++, and change those in its Ros properties. It is a scene capture underneath, so field of view and post-processing work as on any scene capture.
+
+Each image carries the sim time of the frame it was captured in, taken once everything in that frame has moved, physics included. Rendering the camera's view costs what any second view of the scene costs, but nothing waits for the image: the GPU copies it back while the game carries on, and a worker thread publishes it. If the worker can't keep up, as with large images on a slow network, the camera drops older images so the newest goes out next.
+
+It publishes with the default QoS. For another, set `Qos` before BeginPlay:
+
+```cpp
+Camera = CreateDefaultSubobject<URosCameraComponent>(TEXT("Camera"));
+Camera->Qos = ros::SensorDataQos();
+```
+
 ## Time
 
 Unreal governs time. Each game instance publishes its game time on `/clock` every frame, so run ROS nodes with `--ros-args -p use_sim_time:=true`. ROS time then holds while the game is paused, follows time dilation, and starts again from zero on each Play. Stamp messages with the same time:

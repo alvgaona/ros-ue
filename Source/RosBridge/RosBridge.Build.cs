@@ -7,6 +7,7 @@ public class RosBridge : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 		PublicDependencyModuleNames.AddRange(new[] { "Core", "CoreUObject", "Engine" });
+		PrivateDependencyModuleNames.AddRange(new[] { "Projects", "RenderCore", "RHI" }); // the camera's shader and GPU readback
 
 		// Static Cyclone DDS and message types, built by setup.sh
 		string Dds = Path.Combine(PluginDirectory, "ThirdParty", "cyclonedds");

@@ -11,7 +11,7 @@
     {
       "Name": "RosBridge",
       "Type": "Runtime",
-      "LoadingPhase": "Default",
+      "LoadingPhase": "PostConfigInit",
       "PlatformAllowList": [ "Mac", "Linux" ]
     },
     {

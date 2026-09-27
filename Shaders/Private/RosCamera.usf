@@ -1,0 +1,29 @@
+// Packs a camera's render target into bgr8 bytes in a buffer, which the CPU can read back without the GPU going idle.
+#include "/Engine/Public/Platform.ush"
+
+Texture2D<float4> Source;
+RWBuffer<uint> Packed;
+uint Width;
+uint Pixels;
+
+uint3 Bgr(uint Index)
+{
+	if (Index >= Pixels)
+		return 0;
+	return uint3(round(saturate(Source.Load(int3(Index % Width, Index / Width, 0)).bgr) * 255));
+}
+
+// Four pixels make twelve bytes, three little-endian uints
+[numthreads(256, 1, 1)]
+void MainCS(uint Id : SV_DispatchThreadID)
+{
+	if (Id * 4 >= Pixels)
+		return;
+	const uint3 A = Bgr(Id * 4);
+	const uint3 B = Bgr(Id * 4 + 1);
+	const uint3 C = Bgr(Id * 4 + 2);
+	const uint3 D = Bgr(Id * 4 + 3);
+	Packed[Id * 3] = A.x | A.y << 8 | A.z << 16 | B.x << 24;
+	Packed[Id * 3 + 1] = B.y | B.z << 8 | C.x << 16 | C.y << 24;
+	Packed[Id * 3 + 2] = C.z | D.x << 8 | D.y << 16 | D.z << 24;
+}
