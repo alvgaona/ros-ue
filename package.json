@@ -1,0 +1,12 @@
+{
+  "name": "ue-ros-bridge",
+  "private": true,
+  "scripts": {
+    "prepare": "lefthook install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.0.0",
+    "@commitlint/config-conventional": "^21.0.0",
+    "lefthook": "^2.1.6"
+  }
+}

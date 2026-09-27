@@ -1,0 +1,4 @@
+commit-msg:
+  jobs:
+    - name: commitlint
+      run: bunx commitlint --edit {1}
