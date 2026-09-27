@@ -56,8 +56,13 @@ def on_clock(msg):
         sim_tf.sendTransform(offset("slide", "ros_sim", 1.0, 0.0, sim))
 
 
+def on_tf(msg):
+    if not first and msg.transforms[0].header.frame_id == "world":  # Unreal's, not this checker's own frames on slide
+        first.append(ns(msg.transforms[0].header.stamp))
+
+
 sim.create_subscription(Clock, "/clock", on_clock, reliable)
-sim.create_subscription(TFMessage, "/tf", lambda msg: first or first.append(ns(msg.transforms[0].header.stamp)), reliable)
+sim.create_subscription(TFMessage, "/tf", on_tf, reliable)
 
 # Unreal sends its second static frame a second after its first /tf, so join well after that, as a late subscriber
 deadline = time.monotonic() + 300  # Unreal takes a minute or two to start
