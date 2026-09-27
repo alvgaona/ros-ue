@@ -73,6 +73,10 @@ A Ros Camera component publishes what it sees as `sensor_msgs/Image` in `bgr8`: 
 
 Each image carries the sim time of the frame it was captured in, taken once everything in that frame has moved, physics included. Rendering the camera's view costs what any second view of the scene costs, but nothing waits for the image: the GPU copies it back while the game carries on, and a worker thread publishes it. If the worker can't keep up, as with large images on a slow network, the camera drops older images so the newest goes out next.
 
+It also publishes every image as JPEG on `<Topic>/compressed`, as ROS cameras do through `image_transport`, so a node can subscribe to either. RViz's Image display and `rqt_image_view` show it with their transport set to compressed, which needs the `compressed_image_transport` plugin on the ROS side. Like `image_transport`, the camera sends each only while something subscribes to it, so a JPEG is encoded only for a subscriber. Turn off Raw or Compressed to leave that topic out altogether; JpegQuality is 95 by default, as in `image_transport`.
+
+JPEG is about twenty times smaller, so it needs none of the socket buffer tuning above. In Unreal's Open World template, a 1080p image was 0.34 MB instead of 6.2 MB, and a 4K one 1.1 MB instead of 25 MB. With Cyclone's default buffer, 4K JPEG arrived at the camera's full 30 images a second, where raw 4K managed 13.
+
 It publishes with the default QoS. For another, set `Qos` before BeginPlay:
 
 ```cpp

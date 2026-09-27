@@ -29,6 +29,12 @@ namespace ros
 		if (Writer > 0) dds_delete(Writer);
 	}
 
+	int32 PublisherBase::SubscriptionCount() const
+	{
+		dds_publication_matched_status_t Status{};
+		return Writer > 0 && dds_get_publication_matched_status(Writer, &Status) == DDS_RETCODE_OK ? Status.current_count : 0;
+	}
+
 	void PublisherBase::Write(const void* Sample) const
 	{
 		if (!ensureMsgf(Writer > 0, TEXT("Publish on an empty ros::Publisher")))

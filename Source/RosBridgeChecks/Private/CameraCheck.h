@@ -8,7 +8,7 @@ class URosCameraComponent;
 class UStaticMeshComponent;
 
 // A camera on /camera/image_raw for Checks/camera.py, facing a red cube that stands still up and to the left and a green
-// cube that swings side to side with game time. Needs a run that renders.
+// cube that swings side to side with game time. Needs a run that renders. CAMERA_RAW=off turns off its raw topic.
 UCLASS()
 class ACameraCheck : public AActor
 {

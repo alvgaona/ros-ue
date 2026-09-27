@@ -13,6 +13,7 @@ listener = "ros2 run demo_nodes_cpp listener"
 [dependencies]
 cmake = ">=4.4.3,<5"
 git = ">=2.55.0,<3"
+pillow = ">=12.3.0,<13"
 
 [feature.jazzy]
 channels = ["https://prefix.dev/robostack-jazzy"]
@@ -35,6 +36,7 @@ ros-jazzy-rosgraph-msgs = ">=2.0.4,<3"
 ros-jazzy-rcl-interfaces = ">=2.0.4,<3"
 ros-jazzy-tf2-ros-py = ">=0.36.22,<0.37"
 ros-jazzy-rviz2 = ">=14.1.23,<15"
+ros-jazzy-compressed-image-transport = ">=4.0.7,<5"
 
 [feature.humble]
 channels = ["https://prefix.dev/robostack-humble"]

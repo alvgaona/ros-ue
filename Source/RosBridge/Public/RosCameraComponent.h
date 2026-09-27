@@ -32,6 +32,17 @@ public:
 	UPROPERTY(EditAnywhere, Category = Ros, meta = (ClampMin = 1))
 	float FrameRate = 30;
 
+	// Publish bgr8 on Topic, and JPEG on <Topic>/compressed, as image_transport does; each is sent only while something subscribes
+	UPROPERTY(EditAnywhere, Category = Ros)
+	bool Raw = true;
+
+	UPROPERTY(EditAnywhere, Category = Ros)
+	bool Compressed = true;
+
+	// image_transport's default
+	UPROPERTY(EditAnywhere, Category = Ros, meta = (ClampMin = 1, ClampMax = 100))
+	int32 JpegQuality = 95;
+
 	// Read at BeginPlay
 	ros::Qos Qos = 10;
 

@@ -17,6 +17,9 @@ namespace ros
 		PublisherBase& operator=(PublisherBase&& Other);
 		~PublisherBase();
 
+		// Subscriptions matched right now, as rclcpp's get_subscription_count; 0 for an empty handle
+		int32 SubscriptionCount() const;
+
 	protected:
 		void Write(const void* Sample) const;
 

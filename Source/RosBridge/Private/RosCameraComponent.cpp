@@ -2,6 +2,8 @@
 #include "Engine/TextureRenderTarget2D.h"
 #include "Engine/World.h"
 #include "GlobalShader.h"
+#include "IImageWrapper.h"
+#include "IImageWrapperModule.h"
 #include "RenderGraphUtils.h"
 #include "RenderingThread.h"
 #include "RHIGPUReadback.h"
@@ -34,8 +36,9 @@ namespace ros
 	class CameraStream : public TSharedFromThis<CameraStream, ESPMode::ThreadSafe>
 	{
 	public:
-		CameraStream(Publisher<sensor_msgs::msg::Image> InImages, const FString& InFrameId, int32 InWidth, int32 InHeight)
-			: Images(MoveTemp(InImages)), FrameId(InFrameId), Width(InWidth), Height(InHeight)
+		CameraStream(const URosCameraComponent& Camera, Publisher<sensor_msgs::msg::Image> InImages, Publisher<sensor_msgs::msg::CompressedImage> InJpegs)
+			: Images(MoveTemp(InImages)), Jpegs(MoveTemp(InJpegs)), FrameId(Camera.FrameId), Width(Camera.Width), Height(Camera.Height)
+			, JpegQuality(Camera.JpegQuality), ImageWrappers(FModuleManager::LoadModuleChecked<IImageWrapperModule>(TEXT("ImageWrapper")))
 		{
 		}
 
@@ -96,17 +99,43 @@ namespace ros
 			Message.step = Width * 3;
 			Message.data._buffer = Pixels.GetData();
 			Message.data._length = Message.data._maximum = Pixels.Num();
-			Images.Publish(Message);
+			if (Images.SubscriptionCount() > 0)
+				Images.Publish(Message);
+			if (Jpegs.SubscriptionCount() == 0)
+				return;
+
+			// Unreal's JPEG encoder takes four bytes a pixel
+			Bgra.SetNumUninitialized(Width * Height * 4);
+			for (int32 I = 0; I < Width * Height; ++I)
+			{
+				Bgra[I * 4] = Pixels[I * 3];
+				Bgra[I * 4 + 1] = Pixels[I * 3 + 1];
+				Bgra[I * 4 + 2] = Pixels[I * 3 + 2];
+				Bgra[I * 4 + 3] = 255;
+			}
+			const TSharedPtr<IImageWrapper> Encoder = ImageWrappers.CreateImageWrapper(EImageFormat::JPEG);
+			Encoder->SetRaw(Bgra.GetData(), Bgra.Num(), Width, Height, ERGBFormat::BGRA, 8);
+			TArray64<uint8> Jpeg = Encoder->GetCompressed(JpegQuality);
+			sensor_msgs::msg::CompressedImage Compressed{};
+			Compressed.header = Message.header;
+			Compressed.format = const_cast<char*>("bgr8; jpeg compressed bgr8"); // what image_transport's decoder reads
+			Compressed.data._buffer = Jpeg.GetData();
+			Compressed.data._length = Compressed.data._maximum = Jpeg.Num();
+			Jpegs.Publish(Compressed);
 		}
 
 		const Publisher<sensor_msgs::msg::Image> Images;
+		const Publisher<sensor_msgs::msg::CompressedImage> Jpegs;
 		const FString FrameId;
 		const int32 Width;
 		const int32 Height;
+		const int32 JpegQuality;
+		IImageWrapperModule& ImageWrappers;
 		// The render thread's, except Pixels, which the worker has until Publishing completes
 		TArray<Capture> Reading;
 		TArray<TUniquePtr<FRHIGPUBufferReadback>> Free;
 		TArray<uint8> Pixels;
+		TArray<uint8> Bgra; // the worker's
 		UE::Tasks::FTask Publishing;
 	};
 }
@@ -127,7 +156,9 @@ void URosCameraComponent::BeginPlay()
 	TextureTarget = NewObject<UTextureRenderTarget2D>(this);
 	TextureTarget->RenderTargetFormat = RTF_RGBA8; // 8 bits a channel, as bgr8 has
 	TextureTarget->InitAutoFormat(Width, Height);
-	Stream = MakeShared<ros::CameraStream, ESPMode::ThreadSafe>(ros::CreatePublisher<sensor_msgs::msg::Image>(this, Topic, Qos), FrameId, Width, Height);
+	Stream = MakeShared<ros::CameraStream, ESPMode::ThreadSafe>(*this,
+		Raw ? ros::CreatePublisher<sensor_msgs::msg::Image>(this, Topic, Qos) : ros::Publisher<sensor_msgs::msg::Image>(),
+		Compressed ? ros::CreatePublisher<sensor_msgs::msg::CompressedImage>(this, Topic + TEXT("/compressed"), Qos) : ros::Publisher<sensor_msgs::msg::CompressedImage>());
 	NextCapture = GetWorld()->GetTimeSeconds();
 }
 

@@ -35,6 +35,7 @@ ACameraCheck::ACameraCheck()
 
 void ACameraCheck::BeginPlay()
 {
+	Camera->Raw = FPlatformMisc::GetEnvironmentVariable(TEXT("CAMERA_RAW")) != TEXT("off"); // before the camera's BeginPlay reads it
 	Super::BeginPlay();
 	// The empty map the check runs in has no light, and a second sun in a real level would light all of it
 	if (!TActorIterator<ADirectionalLight>(GetWorld()))
