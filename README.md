@@ -1,5 +1,9 @@
 # ue-ros-bridge
 
+[![CI](https://github.com/alvgaona/ue-ros-bridge/actions/workflows/ci.yaml/badge.svg)](https://github.com/alvgaona/ue-ros-bridge/actions/workflows/ci.yaml)
+![Unreal Engine 5](https://img.shields.io/badge/Unreal_Engine-5-313131?logo=unrealengine&logoColor=ffffff)
+![ROS 2](https://img.shields.io/badge/ROS_2-Humble_%7C_Jazzy_%7C_Kilted_%7C_Lyrical-22314e?logo=ros&logoColor=ffffff)
+
 Unreal Engine 5 plugin that talks to ROS 2 over DDS without being a ROS 2 node. Publishers and subscriptions work like rclcpp, and callbacks run on the game thread.
 
 It has two modules. RosBridge is the ROS 2 client: publishers, subscriptions, the clock and TF. RosSim adds the components that take real work to build on top of it, a camera for now. Anything else, from an IMU to a vehicle, you model yourself and publish through RosBridge.
@@ -124,3 +128,7 @@ ROS nodes can publish into the same tree, such as `map → odom` from localizati
 - Every frame has exactly one publisher.
 - ROS nodes that publish moving transforms run with `use_sim_time:=true`. Their wall-clock stamps can't be combined with Unreal's otherwise.
 - A transform about something Unreal simulates agrees with where Unreal has it, for example by building both from the same URDF.
+
+## Contributing
+
+Commits and PR titles follow [Conventional Commits](https://www.conventionalcommits.org/). `bun install` installs a commit-msg hook that checks them. [`AGENTS.md`](AGENTS.md) has the constraints, the layout and how to verify a change in Unreal, and [`.github/workflows/README.md`](.github/workflows/README.md) covers CI and releases.

@@ -1,0 +1,28 @@
+name: Bug
+description: Something doesn't work
+labels: [bug]
+body:
+  - type: textarea
+    attributes:
+      label: What happened
+      description: What you did, what you expected and what you got instead. Include Unreal's log lines from LogRos.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: How to reproduce
+      description: The smallest steps, actor or code that shows it.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Unreal version and platform
+      placeholder: UE 5.8, macOS 26 arm64
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: ROS distro and RMW
+      placeholder: Jazzy, rmw_cyclonedds_cpp
+    validations:
+      required: true
