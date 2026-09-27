@@ -21,9 +21,10 @@ One concept per file, named after the rclcpp or tf2_ros header it copies. Our ty
 - `RosQos.h` has `ros::Qos`. `Private/RosQos.cpp` builds each profile when an endpoint is created, with the type hash in USER_DATA.
 - `RosConversions.h` turns Unreal values into ROS messages: centimeters to meters with Y flipped, rotations mirrored to match, and game time to `builtin_interfaces::msg::Time`. Unreal's axes and units can't be configured (World to Meters only scales VR), and Epic's GeoReferencing plugin converts the same way.
 - `RosClock.h` has `ros::Clock`, which `URos` owns. Each frame it publishes the game instance's game time on `/clock` after the time advances and before any actor ticks, so no stamp is ahead of it. `ros::Now` returns that time for stamps. It is the plugin's only source of time, so a real-time or lockstep mode would change only this class.
+- `RosTransformBroadcaster.h` has `ros::TransformBroadcaster`, tf2_ros's broadcaster taking `ros::Frame`s: one `/tf` message per call, every frame stamped with `ros::Now`. It strips a leading slash from frame ids and refuses frames tf2 would drop.
 - `RosTypeSupport.h` has `ROS_MESSAGE`, which gives a generated message struct its DDS descriptor and ROS 2 type hash. It is the only header without a `.cpp`.
 - `RosMessages.h` is generated into `ThirdParty/msgs/`. It gives every generated message its ROS 2 C++ name (`std_msgs::msg::String`) and registers it with `ROS_MESSAGE`, so there's nothing to register by hand.
-- `Private/Checks/HelloRos` is `demo_nodes_cpp`'s talker and listener in one actor, and the end-to-end check. Actors that only exist for checks go in `Private/Checks/`, and the Python that judges them goes in `Checks/` at the root, as with `ClockCheck` and `clock.py`.
+- `Private/Checks/HelloRos` is `demo_nodes_cpp`'s talker and listener in one actor, and the end-to-end check. Actors that only exist for checks go in `Private/Checks/`, and the Python that judges them goes in `Checks/` at the root, as with `ClockCheck` and `clock.py`, or `TfCheck` and `tf.py`.
 - `Private/Tests/` has automation tests for code that needs no ROS, one behavior per test.
 - `Scripts/setup.sh`, run as `pixi run setup`, builds Cyclone DDS and every message in its `PACKAGES` into `ThirdParty/`. That directory is generated and ignored; don't edit it.
 - `Scripts/idl.py` rewrites the IDL that ROS ships in the pixi environment (`share/<pkg>/msg/`) under the names ROS 2 uses on the wire, and writes `RosMessages.h`. Never hand-write message IDL.
@@ -43,7 +44,8 @@ One concept per file, named after the rclcpp or tf2_ros header it copies. Our ty
 - UE 5.8's build accelerator (UBA) loses the object files when the plugin folder is a symlink, and the link fails with `no such file or directory`. The host project turns it off with `bAllowUBAExecutor` set to false in its own `Saved/UnrealBuildTool/BuildConfiguration.xml`. `AdditionalPluginDirectories` is no way around it, since it only finds plugins one folder down and this repo is the plugin folder.
 - Building while any editor runs, even one still at the Project Browser, links a hot-reload binary such as `libUnrealEditor-RosBridge-0001.dylib` that the module list doesn't name, so the project opens with the old plugin. Pass `-NoHotReload`, as below. If the editor has the host project open, build the `/private/tmp` copy instead.
 - Every game instance publishes its own `/clock`, so several PIE clients on one domain give ROS several clocks. Game time starts from zero on each Play and level load, which ROS nodes see as time jumping back.
-- Game time in a headless run goes about six times faster than the wall clock. Frames there beat 2000 fps, and Unreal counts each as at least `MinUndilatedFrameTime`, 0.5 ms in the engine's `BaseGame.ini`. `Checks/clock.py` prints the ratio. Don't read timing from that mode. A fixed frame rate holds it to the wall clock, with `"-ini:Engine:[/Script/Engine.Engine]:bUseFixedFrameRate=True,[/Script/Engine.Engine]:FixedFrameRate=60"` on the command line.
+- Unreal advances game time before any actor ticks, and physics moves bodies between `TG_PrePhysics` and `TG_PostPhysics`. A physics body read before physics is the previous frame's pose under this frame's stamp, so send it from `TG_PostPhysics` or later. `TfCheck` measures this as 3f.
+- Game time in a headless run goes about six times faster than the wall clock. Frames there beat 2000 fps, and Unreal counts each as at least `MinUndilatedFrameTime`, 0.5 ms in the engine's `BaseGame.ini`. `Checks/run.sh` fixes the frame rate at 60 with an `-ini` override, which makes every step 1/60 s and holds game time to the wall clock. Don't read timing from a headless run without it.
 
 ## Verifying changes
 
@@ -72,6 +74,7 @@ Checks with a Python side run through `Checks/run.sh`. It starts the checker, th
 ```sh
 sh Checks/run.sh ClockCheck clock.py
 sh Checks/run.sh ClockCheck clock.py default rmw_fastrtps_cpp
+sh Checks/run.sh TfCheck tf.py
 ```
 
 Repeat against the other distros with `-e humble`, `-e kilted` and `-e lyrical` after `pixi run`. Lyrical's `demo_nodes_cpp` uses `example_interfaces/msg/String` instead of `std_msgs/msg/String`; its nodes still reach Unreal on Cyclone but not on Fast DDS. Test Lyrical with `pixi run -e lyrical ros2 topic echo /chatter std_msgs/msg/String` and `ros2 topic pub` instead. On 2026-09-26 all four distros passed both ways on both RMWs.

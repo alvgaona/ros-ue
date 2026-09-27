@@ -7,6 +7,7 @@
 #include "RosPublisher.h"
 #include "RosQos.h"
 #include "RosSubscription.h"
+#include "RosTransformBroadcaster.h"
 #include "RosTypeSupport.h"
 #include "Ros.generated.h"
 

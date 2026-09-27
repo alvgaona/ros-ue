@@ -50,3 +50,17 @@ Message.header.stamp = ros::Now(this);
 In the editor, turn off Editor Preferences → General → Performance → Use Less CPU when in Background. It is on by default and holds the editor to 3 frames per second whenever another app, such as a terminal or RViz, is in front, so the simulation and `/clock` step only three times a second.
 
 Each frame moves game time on by however long it took, so `/clock` steps vary with the frame rate. For a fixed step, turn on Project Settings → Engine → General Settings → Framerate → Use Fixed Frame Rate. Every frame then moves game time on by exactly 1/rate, and a frame that runs long leaves game time behind the wall clock instead of taking a bigger step.
+
+## TF
+
+A transform broadcaster works like tf2_ros's. It sends frames on `/tf`, converted to ROS and stamped with the time `/clock` carries, and all the frames of one call go out as one message:
+
+```cpp
+Broadcaster = ros::TransformBroadcaster(this); // in BeginPlay, and `Broadcaster = {};` in EndPlay
+Broadcaster.SendTransform({
+	{ TEXT("world"), TEXT("base_link"), GetActorTransform() },
+	{ TEXT("base_link"), TEXT("lidar"), Lidar->GetRelativeTransform() },
+});
+```
+
+Send the pose of anything physics moves from a tick in `TG_PostPhysics` or later. Before physics runs, a body still has the previous frame's pose while the stamp already has this frame's time, so its transform would arrive a frame late.

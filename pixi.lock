@@ -241,7 +241,10 @@ environments:
       - conda: https://prefix.dev/robostack-jazzy/linux-64/ros-jazzy-spdlog-vendor-1.6.2-np2py312h918b84f_21.conda
       - conda: https://prefix.dev/robostack-jazzy/linux-64/ros-jazzy-statistics-msgs-2.0.4-np2py312h2ed9cc7_21.conda
       - conda: https://prefix.dev/robostack-jazzy/linux-64/ros-jazzy-std-msgs-5.3.8-np2py312h2ed9cc7_21.conda
+      - conda: https://prefix.dev/robostack-jazzy/linux-64/ros-jazzy-tf2-0.36.22-np2py312h2ed9cc7_21.conda
       - conda: https://prefix.dev/robostack-jazzy/linux-64/ros-jazzy-tf2-msgs-0.36.22-np2py312h2ed9cc7_21.conda
+      - conda: https://prefix.dev/robostack-jazzy/linux-64/ros-jazzy-tf2-py-0.36.22-np2py312h2ed9cc7_21.conda
+      - conda: https://prefix.dev/robostack-jazzy/linux-64/ros-jazzy-tf2-ros-py-0.36.22-np2py312h2ed9cc7_21.conda
       - conda: https://prefix.dev/robostack-jazzy/linux-64/ros-jazzy-tracetools-8.2.6-np2py312h2ed9cc7_21.conda
       - conda: https://prefix.dev/robostack-jazzy/linux-64/ros-jazzy-type-description-interfaces-2.0.4-np2py312h2ed9cc7_21.conda
       - conda: https://prefix.dev/robostack-jazzy/linux-64/ros-jazzy-uncrustify-vendor-3.0.1-np2py312h2ed9cc7_21.conda
@@ -568,7 +571,10 @@ environments:
       - conda: https://prefix.dev/robostack-jazzy/osx-arm64/ros-jazzy-spdlog-vendor-1.6.2-np2py312h88edd79_21.conda
       - conda: https://prefix.dev/robostack-jazzy/osx-arm64/ros-jazzy-statistics-msgs-2.0.4-np2py312haf4906a_21.conda
       - conda: https://prefix.dev/robostack-jazzy/osx-arm64/ros-jazzy-std-msgs-5.3.8-np2py312haf4906a_21.conda
+      - conda: https://prefix.dev/robostack-jazzy/osx-arm64/ros-jazzy-tf2-0.36.22-np2py312haf4906a_21.conda
       - conda: https://prefix.dev/robostack-jazzy/osx-arm64/ros-jazzy-tf2-msgs-0.36.22-np2py312haf4906a_21.conda
+      - conda: https://prefix.dev/robostack-jazzy/osx-arm64/ros-jazzy-tf2-py-0.36.22-np2py312haf4906a_21.conda
+      - conda: https://prefix.dev/robostack-jazzy/osx-arm64/ros-jazzy-tf2-ros-py-0.36.22-np2py312haf4906a_21.conda
       - conda: https://prefix.dev/robostack-jazzy/osx-arm64/ros-jazzy-tracetools-8.2.6-np2py312haf4906a_21.conda
       - conda: https://prefix.dev/robostack-jazzy/osx-arm64/ros-jazzy-type-description-interfaces-2.0.4-np2py312haf4906a_21.conda
       - conda: https://prefix.dev/robostack-jazzy/osx-arm64/ros-jazzy-uncrustify-vendor-3.0.1-np2py312haf4906a_21.conda
@@ -882,7 +888,10 @@ environments:
       - conda: https://prefix.dev/robostack-humble/linux-64/ros-humble-spdlog-vendor-1.3.1-np126py311h11365e7_13.conda
       - conda: https://prefix.dev/robostack-humble/linux-64/ros-humble-statistics-msgs-1.2.1-np126py311hbc2a38a_13.conda
       - conda: https://prefix.dev/robostack-humble/linux-64/ros-humble-std-msgs-4.9.0-np126py311hbc2a38a_13.conda
+      - conda: https://prefix.dev/robostack-humble/linux-64/ros-humble-tf2-0.25.14-np126py311hbc2a38a_13.conda
       - conda: https://prefix.dev/robostack-humble/linux-64/ros-humble-tf2-msgs-0.25.14-np126py311hbc2a38a_13.conda
+      - conda: https://prefix.dev/robostack-humble/linux-64/ros-humble-tf2-py-0.25.14-np126py311hbc2a38a_13.conda
+      - conda: https://prefix.dev/robostack-humble/linux-64/ros-humble-tf2-ros-py-0.25.14-np126py311hbc2a38a_13.conda
       - conda: https://prefix.dev/robostack-humble/linux-64/ros-humble-tracetools-4.1.1-np126py311hbc2a38a_13.conda
       - conda: https://prefix.dev/robostack-humble/linux-64/ros-humble-unique-identifier-msgs-2.2.1-np126py311hbc2a38a_13.conda
       - conda: https://prefix.dev/robostack-humble/linux-64/ros2-distro-mutex-0.7.0-humble_13.conda
@@ -1068,7 +1077,10 @@ environments:
       - conda: https://prefix.dev/robostack-humble/osx-arm64/ros-humble-spdlog-vendor-1.3.1-np126py311h6932ae0_13.conda
       - conda: https://prefix.dev/robostack-humble/osx-arm64/ros-humble-statistics-msgs-1.2.1-np126py311h2a51a2c_13.conda
       - conda: https://prefix.dev/robostack-humble/osx-arm64/ros-humble-std-msgs-4.9.0-np126py311h2a51a2c_13.conda
+      - conda: https://prefix.dev/robostack-humble/osx-arm64/ros-humble-tf2-0.25.14-np126py311h2a51a2c_13.conda
       - conda: https://prefix.dev/robostack-humble/osx-arm64/ros-humble-tf2-msgs-0.25.14-np126py311h2a51a2c_13.conda
+      - conda: https://prefix.dev/robostack-humble/osx-arm64/ros-humble-tf2-py-0.25.14-np126py311h2a51a2c_13.conda
+      - conda: https://prefix.dev/robostack-humble/osx-arm64/ros-humble-tf2-ros-py-0.25.14-np126py311h2a51a2c_13.conda
       - conda: https://prefix.dev/robostack-humble/osx-arm64/ros-humble-tracetools-4.1.1-np126py311h2a51a2c_13.conda
       - conda: https://prefix.dev/robostack-humble/osx-arm64/ros-humble-unique-identifier-msgs-2.2.1-np126py311h2a51a2c_13.conda
       - conda: https://prefix.dev/robostack-humble/osx-arm64/ros2-distro-mutex-0.7.0-humble_13.conda
@@ -1291,7 +1303,10 @@ environments:
       - conda: https://prefix.dev/robostack-kilted/linux-64/ros-kilted-spdlog-vendor-1.7.0-np2py312h918b84f_21.conda
       - conda: https://prefix.dev/robostack-kilted/linux-64/ros-kilted-statistics-msgs-2.3.1-np2py312h2ed9cc7_21.conda
       - conda: https://prefix.dev/robostack-kilted/linux-64/ros-kilted-std-msgs-5.5.2-np2py312h2ed9cc7_21.conda
+      - conda: https://prefix.dev/robostack-kilted/linux-64/ros-kilted-tf2-0.41.6-np2py312h2ed9cc7_21.conda
       - conda: https://prefix.dev/robostack-kilted/linux-64/ros-kilted-tf2-msgs-0.41.6-np2py312h2ed9cc7_21.conda
+      - conda: https://prefix.dev/robostack-kilted/linux-64/ros-kilted-tf2-py-0.41.6-np2py312h2ed9cc7_21.conda
+      - conda: https://prefix.dev/robostack-kilted/linux-64/ros-kilted-tf2-ros-py-0.41.6-np2py312h2ed9cc7_21.conda
       - conda: https://prefix.dev/robostack-kilted/linux-64/ros-kilted-tracetools-8.6.0-np2py312h2ed9cc7_21.conda
       - conda: https://prefix.dev/robostack-kilted/linux-64/ros-kilted-type-description-interfaces-2.3.1-np2py312h2ed9cc7_21.conda
       - conda: https://prefix.dev/robostack-kilted/linux-64/ros-kilted-uncrustify-vendor-3.1.0-np2py312h2ed9cc7_21.conda
@@ -1502,7 +1517,10 @@ environments:
       - conda: https://prefix.dev/robostack-kilted/osx-arm64/ros-kilted-spdlog-vendor-1.7.0-np2py312h13c16a8_21.conda
       - conda: https://prefix.dev/robostack-kilted/osx-arm64/ros-kilted-statistics-msgs-2.3.1-np2py312h50b1e4c_21.conda
       - conda: https://prefix.dev/robostack-kilted/osx-arm64/ros-kilted-std-msgs-5.5.2-np2py312h50b1e4c_21.conda
+      - conda: https://prefix.dev/robostack-kilted/osx-arm64/ros-kilted-tf2-0.41.6-np2py312h50b1e4c_21.conda
       - conda: https://prefix.dev/robostack-kilted/osx-arm64/ros-kilted-tf2-msgs-0.41.6-np2py312h50b1e4c_21.conda
+      - conda: https://prefix.dev/robostack-kilted/osx-arm64/ros-kilted-tf2-py-0.41.6-np2py312h50b1e4c_21.conda
+      - conda: https://prefix.dev/robostack-kilted/osx-arm64/ros-kilted-tf2-ros-py-0.41.6-np2py312h50b1e4c_21.conda
       - conda: https://prefix.dev/robostack-kilted/osx-arm64/ros-kilted-tracetools-8.6.0-np2py312h50b1e4c_21.conda
       - conda: https://prefix.dev/robostack-kilted/osx-arm64/ros-kilted-type-description-interfaces-2.3.1-np2py312h50b1e4c_21.conda
       - conda: https://prefix.dev/robostack-kilted/osx-arm64/ros-kilted-uncrustify-vendor-3.1.0-np2py312h50b1e4c_21.conda
@@ -1634,6 +1652,7 @@ environments:
       - conda: https://prefix.dev/robostack-lyrical/linux-64/ros-lyrical-sensor-msgs-5.9.3-hb0f4dca_25.conda
       - conda: https://prefix.dev/robostack-lyrical/linux-64/ros-lyrical-std-msgs-5.9.3-hb0f4dca_25.conda
       - conda: https://prefix.dev/robostack-lyrical/linux-64/ros-lyrical-tf2-msgs-0.45.9-hb0f4dca_25.conda
+      - conda: https://prefix.dev/robostack-lyrical/linux-64/ros-lyrical-tf2-ros-py-0.45.9-hb0f4dca_25.conda
       - conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-action-msgs-2.4.5-np2py314hb48eaa3_25.conda
       - conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-ament-cmake-2.8.8-np2py314hb48eaa3_25.conda
       - conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-ament-cmake-core-2.8.8-np2py314hb48eaa3_25.conda
@@ -1760,7 +1779,10 @@ environments:
       - conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-spdlog-vendor-1.8.0-np2py314hf9cd13f_25.conda
       - conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-statistics-msgs-2.4.5-np2py314hb48eaa3_25.conda
       - conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-std-msgs-5.9.3-np2py314hb48eaa3_25.conda
+      - conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-tf2-0.45.9-np2py314hb48eaa3_25.conda
       - conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-tf2-msgs-0.45.9-np2py314hb48eaa3_25.conda
+      - conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-tf2-py-0.45.9-np2py314hb48eaa3_25.conda
+      - conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-tf2-ros-py-0.45.9-np2py314hb48eaa3_25.conda
       - conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-tracetools-8.10.2-np2py314hb48eaa3_25.conda
       - conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-type-description-interfaces-2.4.5-np2py314hb48eaa3_25.conda
       - conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-uncrustify-vendor-3.2.0-np2py314hb48eaa3_25.conda
@@ -1877,6 +1899,7 @@ environments:
       - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros-lyrical-sensor-msgs-5.9.3-h60d57d3_25.conda
       - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros-lyrical-std-msgs-5.9.3-h60d57d3_25.conda
       - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros-lyrical-tf2-msgs-0.45.9-h60d57d3_25.conda
+      - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros-lyrical-tf2-ros-py-0.45.9-h60d57d3_25.conda
       - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-action-msgs-2.4.5-np2py314h2e2674b_25.conda
       - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-ament-cmake-2.8.8-np2py314h2e2674b_25.conda
       - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-ament-cmake-core-2.8.8-np2py314h2e2674b_25.conda
@@ -2003,7 +2026,10 @@ environments:
       - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-spdlog-vendor-1.8.0-np2py314h7238544_25.conda
       - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-statistics-msgs-2.4.5-np2py314h2e2674b_25.conda
       - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-std-msgs-5.9.3-np2py314h2e2674b_25.conda
+      - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-tf2-0.45.9-np2py314h2e2674b_25.conda
       - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-tf2-msgs-0.45.9-np2py314h2e2674b_25.conda
+      - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-tf2-py-0.45.9-np2py314h2e2674b_25.conda
+      - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-tf2-ros-py-0.45.9-np2py314h2e2674b_25.conda
       - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-tracetools-8.10.2-np2py314h2e2674b_25.conda
       - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-type-description-interfaces-2.4.5-np2py314h2e2674b_25.conda
       - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-uncrustify-vendor-3.2.0-np2py314h2e2674b_25.conda
@@ -7426,6 +7452,31 @@ packages:
   run_exports: {}
   size: 285335
   timestamp: 1753311872139
+- conda: https://prefix.dev/robostack-humble/linux-64/ros-humble-tf2-0.25.14-np126py311hbc2a38a_13.conda
+  sha256: 20074fb310cced124e01a92567b9b2097c66a9807c4bf6de0b4889e3e20cfaab
+  md5: b9b653f18a3046a382aa434b2730e911
+  depends:
+  - console_bridge
+  - python
+  - ros-humble-builtin-interfaces
+  - ros-humble-console-bridge-vendor
+  - ros-humble-geometry-msgs
+  - ros-humble-rcutils
+  - ros-humble-ros-workspace
+  - ros-humble-rosidl-runtime-cpp
+  - ros2-distro-mutex 0.7.* humble_*
+  - libgcc >=13
+  - __glibc >=2.17,<3.0.a0
+  - libstdcxx >=13
+  - libgcc >=13
+  - ros2-distro-mutex >=0.7.0,<0.8.0a0
+  - python_abi 3.11.* *_cp311
+  - numpy >=1.26.4,<2.0a0
+  - console_bridge >=1.0.2,<1.1.0a0
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 131232
+  timestamp: 1753312285376
 - conda: https://prefix.dev/robostack-humble/linux-64/ros-humble-tf2-msgs-0.25.14-np126py311hbc2a38a_13.conda
   sha256: 24d65455d31effcb963347a1f7b278cb4613e136b746cf95e7f673a993855856
   md5: 5da6a174f12405a44f84f4d5adf9e409
@@ -7448,6 +7499,52 @@ packages:
   run_exports: {}
   size: 170525
   timestamp: 1753312188939
+- conda: https://prefix.dev/robostack-humble/linux-64/ros-humble-tf2-py-0.25.14-np126py311hbc2a38a_13.conda
+  sha256: ca162128f43c9540ac6a5f92400a0f1720423240019dfcf305ceff1b64a01dc0
+  md5: 6ec160638206734caa1b853a60cc81f2
+  depends:
+  - python
+  - ros-humble-builtin-interfaces
+  - ros-humble-geometry-msgs
+  - ros-humble-rclpy
+  - ros-humble-ros-workspace
+  - ros-humble-rpyutils
+  - ros-humble-tf2
+  - ros2-distro-mutex 0.7.* humble_*
+  - __glibc >=2.17,<3.0.a0
+  - libstdcxx >=13
+  - libgcc >=13
+  - python_abi 3.11.* *_cp311
+  - ros2-distro-mutex >=0.7.0,<0.8.0a0
+  - numpy >=1.26.4,<2.0a0
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 55858
+  timestamp: 1753313131962
+- conda: https://prefix.dev/robostack-humble/linux-64/ros-humble-tf2-ros-py-0.25.14-np126py311hbc2a38a_13.conda
+  sha256: c32d00748d90ebeab97ec13df6be290acaf670ad7470f9330439167a458401b6
+  md5: 21a0efcb62a128cf0d13ee1f066100ad
+  depends:
+  - python
+  - ros-humble-geometry-msgs
+  - ros-humble-rclpy
+  - ros-humble-ros-workspace
+  - ros-humble-sensor-msgs
+  - ros-humble-std-msgs
+  - ros-humble-tf2-msgs
+  - ros-humble-tf2-py
+  - ros2-distro-mutex 0.7.* humble_*
+  - libstdcxx >=13
+  - libgcc >=13
+  - __glibc >=2.17,<3.0.a0
+  - libgcc >=13
+  - numpy >=1.26.4,<2.0a0
+  - ros2-distro-mutex >=0.7.0,<0.8.0a0
+  - python_abi 3.11.* *_cp311
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 45070
+  timestamp: 1753313502785
 - conda: https://prefix.dev/robostack-humble/linux-64/ros-humble-tracetools-4.1.1-np126py311hbc2a38a_13.conda
   sha256: 93982131be249a36fddde88395345ccdc6d3aed356e13ffcb1a54bb43c1b8b4c
   md5: de14d6283f08354ac73d99104822d0c3
@@ -9600,6 +9697,29 @@ packages:
   run_exports: {}
   size: 245288
   timestamp: 1753311243013
+- conda: https://prefix.dev/robostack-humble/osx-arm64/ros-humble-tf2-0.25.14-np126py311h2a51a2c_13.conda
+  sha256: 96be4f43389e38ca46ea914433860a3c59d95fe5757f561d83f9d1a935437ad3
+  md5: 570f98bc733642b5a891f04e0ffda2a6
+  depends:
+  - console_bridge
+  - python
+  - ros-humble-builtin-interfaces
+  - ros-humble-console-bridge-vendor
+  - ros-humble-geometry-msgs
+  - ros-humble-rcutils
+  - ros-humble-ros-workspace
+  - ros-humble-rosidl-runtime-cpp
+  - ros2-distro-mutex 0.7.* humble_*
+  - libcxx >=18
+  - __osx >=11.0
+  - console_bridge >=1.0.2,<1.1.0a0
+  - python_abi 3.11.* *_cp311
+  - ros2-distro-mutex >=0.7.0,<0.8.0a0
+  - numpy >=1.26.4,<2.0a0
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 117184
+  timestamp: 1753311823368
 - conda: https://prefix.dev/robostack-humble/osx-arm64/ros-humble-tf2-msgs-0.25.14-np126py311h2a51a2c_13.conda
   sha256: d43065c7c640207c67d34d824afff681d84b00c5a836959415998c42faccdd8b
   md5: 62cf9478357bd4491a2dfbae20cc87d9
@@ -9620,6 +9740,49 @@ packages:
   run_exports: {}
   size: 152955
   timestamp: 1753311861247
+- conda: https://prefix.dev/robostack-humble/osx-arm64/ros-humble-tf2-py-0.25.14-np126py311h2a51a2c_13.conda
+  sha256: 859273191342ba51733bc7525ac6366cca8dfb82ee538c2c24c8362bc679b755
+  md5: 8214a96048e3405304deb4dee475fb02
+  depends:
+  - python
+  - ros-humble-builtin-interfaces
+  - ros-humble-geometry-msgs
+  - ros-humble-rclpy
+  - ros-humble-ros-workspace
+  - ros-humble-rpyutils
+  - ros-humble-tf2
+  - ros2-distro-mutex 0.7.* humble_*
+  - __osx >=11.0
+  - libcxx >=18
+  - ros2-distro-mutex >=0.7.0,<0.8.0a0
+  - numpy >=1.26.4,<2.0a0
+  - python_abi 3.11.* *_cp311
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 50027
+  timestamp: 1753313083406
+- conda: https://prefix.dev/robostack-humble/osx-arm64/ros-humble-tf2-ros-py-0.25.14-np126py311h2a51a2c_13.conda
+  sha256: c1f9661b56a25a1919143c077bdf6e0c51441ca238f40b2235cd47e9b05a305b
+  md5: 631915cb28418ad0010696e3381f2db6
+  depends:
+  - python
+  - ros-humble-geometry-msgs
+  - ros-humble-rclpy
+  - ros-humble-ros-workspace
+  - ros-humble-sensor-msgs
+  - ros-humble-std-msgs
+  - ros-humble-tf2-msgs
+  - ros-humble-tf2-py
+  - ros2-distro-mutex 0.7.* humble_*
+  - __osx >=11.0
+  - libcxx >=18
+  - ros2-distro-mutex >=0.7.0,<0.8.0a0
+  - python_abi 3.11.* *_cp311
+  - numpy >=1.26.4,<2.0a0
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 45159
+  timestamp: 1753313431439
 - conda: https://prefix.dev/robostack-humble/osx-arm64/ros-humble-tracetools-4.1.1-np126py311h2a51a2c_13.conda
   sha256: 441fdd2f9a03d346fc816a05b9d9d293e28c6d200e4dc7de4f4263f872a706b9
   md5: 981283f9101e0428444a28066e91d02c
@@ -12191,6 +12354,27 @@ packages:
   run_exports: {}
   size: 351337
   timestamp: 1788191701184
+- conda: https://prefix.dev/robostack-jazzy/linux-64/ros-jazzy-tf2-0.36.22-np2py312h2ed9cc7_21.conda
+  sha256: 4bf2258d37777475a4744e30cbb81e7059c814dbd1b4222f9723d221c0980397
+  md5: 850c765b19d48aaf6ba82e323d4a77ff
+  depends:
+  - python
+  - ros-jazzy-builtin-interfaces
+  - ros-jazzy-geometry-msgs
+  - ros-jazzy-rcutils
+  - ros-jazzy-ros-workspace
+  - ros-jazzy-rosidl-runtime-cpp
+  - ros2-distro-mutex 0.16.* jazzy_*
+  - libgcc >=14
+  - libstdcxx >=14
+  - __glibc >=2.17,<3.0.a0
+  - python_abi 3.12.* *_cp312
+  - numpy >=1.25,<3
+  - ros2-distro-mutex >=0.16.0,<0.17.0a0
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 135020
+  timestamp: 1788192088247
 - conda: https://prefix.dev/robostack-jazzy/linux-64/ros-jazzy-tf2-msgs-0.36.22-np2py312h2ed9cc7_21.conda
   sha256: 195d0c213fe1a7590e2e7f4682ae43851a4bc1c5bdb63d8ea4157b2dd89afa50
   md5: 04abdc29d07768376e824c101c647636
@@ -12211,6 +12395,52 @@ packages:
   run_exports: {}
   size: 264753
   timestamp: 1788192056034
+- conda: https://prefix.dev/robostack-jazzy/linux-64/ros-jazzy-tf2-py-0.36.22-np2py312h2ed9cc7_21.conda
+  sha256: a5f522e34da555bb9310f375ab09c023aabb77e2ca6051c87386bfb22aecc938
+  md5: cd7305c8076412e23c36476577c12716
+  depends:
+  - python
+  - ros-jazzy-builtin-interfaces
+  - ros-jazzy-geometry-msgs
+  - ros-jazzy-rclpy
+  - ros-jazzy-ros-workspace
+  - ros-jazzy-rpyutils
+  - ros-jazzy-tf2
+  - ros2-distro-mutex 0.16.* jazzy_*
+  - libstdcxx >=14
+  - libgcc >=14
+  - __glibc >=2.17,<3.0.a0
+  - ros2-distro-mutex >=0.16.0,<0.17.0a0
+  - numpy >=1.25,<3
+  - python_abi 3.12.* *_cp312
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 59325
+  timestamp: 1788193408665
+- conda: https://prefix.dev/robostack-jazzy/linux-64/ros-jazzy-tf2-ros-py-0.36.22-np2py312h2ed9cc7_21.conda
+  sha256: c405862fd002f6d8c63a04eb92b41f63d45f860e78365c754039da8c0c09000c
+  md5: e52cc447cc64582594fc13c8a60d33e5
+  depends:
+  - python
+  - ros-jazzy-builtin-interfaces
+  - ros-jazzy-geometry-msgs
+  - ros-jazzy-rclpy
+  - ros-jazzy-ros-workspace
+  - ros-jazzy-sensor-msgs
+  - ros-jazzy-std-msgs
+  - ros-jazzy-tf2-msgs
+  - ros-jazzy-tf2-py
+  - ros2-distro-mutex 0.16.* jazzy_*
+  - __glibc >=2.17,<3.0.a0
+  - libgcc >=14
+  - libstdcxx >=14
+  - ros2-distro-mutex >=0.16.0,<0.17.0a0
+  - python_abi 3.12.* *_cp312
+  - numpy >=1.25,<3
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 49875
+  timestamp: 1788212404376
 - conda: https://prefix.dev/robostack-jazzy/linux-64/ros-jazzy-tracetools-8.2.6-np2py312h2ed9cc7_21.conda
   sha256: 0cbd8c24d88f4a1ecaf1a91b2025ce154c83d084e281e465d80459e7e51a56b3
   md5: 766885caad3fc9c85f2a7cdfe79d3120
@@ -16943,6 +17173,26 @@ packages:
   run_exports: {}
   size: 295483
   timestamp: 1788195352832
+- conda: https://prefix.dev/robostack-jazzy/osx-arm64/ros-jazzy-tf2-0.36.22-np2py312haf4906a_21.conda
+  sha256: 7147e67bd0bf004910b9a8d0f451b191f8373831b6cb37740d809a1902f21f9d
+  md5: 810248edbc5fb23cf5805016c15f9f6b
+  depends:
+  - python
+  - ros-jazzy-builtin-interfaces
+  - ros-jazzy-geometry-msgs
+  - ros-jazzy-rcutils
+  - ros-jazzy-ros-workspace
+  - ros-jazzy-rosidl-runtime-cpp
+  - ros2-distro-mutex 0.16.* jazzy_*
+  - libcxx >=19
+  - __osx >=12.0
+  - python_abi 3.12.* *_cp312
+  - numpy >=1.25,<3
+  - ros2-distro-mutex >=0.16.0,<0.17.0a0
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 124163
+  timestamp: 1788196453402
 - conda: https://prefix.dev/robostack-jazzy/osx-arm64/ros-jazzy-tf2-msgs-0.36.22-np2py312haf4906a_21.conda
   sha256: fc35bc3fee840e3ce03bd30c3dfee430d89f47bf61a36ef641d5bb09a3fe498b
   md5: 7abf2d86b32162cbc4ba36697ebd58cf
@@ -16962,6 +17212,50 @@ packages:
   run_exports: {}
   size: 237601
   timestamp: 1788196409419
+- conda: https://prefix.dev/robostack-jazzy/osx-arm64/ros-jazzy-tf2-py-0.36.22-np2py312haf4906a_21.conda
+  sha256: dc0970149edee93d1f40c5739de2740617d29e9efdd6e7e83c80cc98b861b32b
+  md5: d0fa75f4371b5d398f1d607aa24947eb
+  depends:
+  - python
+  - ros-jazzy-builtin-interfaces
+  - ros-jazzy-geometry-msgs
+  - ros-jazzy-rclpy
+  - ros-jazzy-ros-workspace
+  - ros-jazzy-rpyutils
+  - ros-jazzy-tf2
+  - ros2-distro-mutex 0.16.* jazzy_*
+  - libcxx >=19
+  - __osx >=12.0
+  - python_abi 3.12.* *_cp312
+  - ros2-distro-mutex >=0.16.0,<0.17.0a0
+  - numpy >=1.25,<3
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 52233
+  timestamp: 1788198643857
+- conda: https://prefix.dev/robostack-jazzy/osx-arm64/ros-jazzy-tf2-ros-py-0.36.22-np2py312haf4906a_21.conda
+  sha256: d146606e49b01a4511d51420ecc13a55942e59b1feebe93cb9b1e77f3552c560
+  md5: f9a9b0e6616036cc7be26f68289873cf
+  depends:
+  - python
+  - ros-jazzy-builtin-interfaces
+  - ros-jazzy-geometry-msgs
+  - ros-jazzy-rclpy
+  - ros-jazzy-ros-workspace
+  - ros-jazzy-sensor-msgs
+  - ros-jazzy-std-msgs
+  - ros-jazzy-tf2-msgs
+  - ros-jazzy-tf2-py
+  - ros2-distro-mutex 0.16.* jazzy_*
+  - libcxx >=19
+  - __osx >=12.0
+  - python_abi 3.12.* *_cp312
+  - ros2-distro-mutex >=0.16.0,<0.17.0a0
+  - numpy >=1.25,<3
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 50796
+  timestamp: 1788199149784
 - conda: https://prefix.dev/robostack-jazzy/osx-arm64/ros-jazzy-tracetools-8.2.6-np2py312haf4906a_21.conda
   sha256: d835fa09670d08214ea4335f45418157fb428dc07944967ce91342e0d3f14d6e
   md5: 9617626af547874d114c743b37463d90
@@ -21789,6 +22083,27 @@ packages:
   run_exports: {}
   size: 347133
   timestamp: 1783543753877
+- conda: https://prefix.dev/robostack-kilted/linux-64/ros-kilted-tf2-0.41.6-np2py312h2ed9cc7_21.conda
+  sha256: 062642db430a4811ef02421d279d484404ce1befe1a7cf9bb403308de4fc12b2
+  md5: 6989b49efbfdf7f3c6de198728ee11fc
+  depends:
+  - python
+  - ros-kilted-builtin-interfaces
+  - ros-kilted-geometry-msgs
+  - ros-kilted-rcutils
+  - ros-kilted-ros-workspace
+  - ros-kilted-rosidl-runtime-cpp
+  - ros2-distro-mutex 0.17.* kilted_*
+  - __glibc >=2.17,<3.0.a0
+  - libstdcxx >=14
+  - libgcc >=14
+  - ros2-distro-mutex >=0.17.0,<0.18.0a0
+  - python_abi 3.12.* *_cp312
+  - numpy >=1.25,<3
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 136446
+  timestamp: 1783544784921
 - conda: https://prefix.dev/robostack-kilted/linux-64/ros-kilted-tf2-msgs-0.41.6-np2py312h2ed9cc7_21.conda
   sha256: c43f7d985998aca6992034541f3799f5efd0bc7b15e623eb38d75fee450cffae
   md5: e68d764235d068bf177376f96c0ae9ff
@@ -21809,6 +22124,52 @@ packages:
   run_exports: {}
   size: 262411
   timestamp: 1783544017466
+- conda: https://prefix.dev/robostack-kilted/linux-64/ros-kilted-tf2-py-0.41.6-np2py312h2ed9cc7_21.conda
+  sha256: 5d0d125e56e85019397a49a9ae3f294b4b840529ab3a88d357027fe5aad702d1
+  md5: 5af520949df2c6bea486fcd687356901
+  depends:
+  - python
+  - ros-kilted-builtin-interfaces
+  - ros-kilted-geometry-msgs
+  - ros-kilted-rclpy
+  - ros-kilted-ros-workspace
+  - ros-kilted-rpyutils
+  - ros-kilted-tf2
+  - ros2-distro-mutex 0.17.* kilted_*
+  - __glibc >=2.17,<3.0.a0
+  - libgcc >=14
+  - libstdcxx >=14
+  - ros2-distro-mutex >=0.17.0,<0.18.0a0
+  - numpy >=1.25,<3
+  - python_abi 3.12.* *_cp312
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 58206
+  timestamp: 1783545526410
+- conda: https://prefix.dev/robostack-kilted/linux-64/ros-kilted-tf2-ros-py-0.41.6-np2py312h2ed9cc7_21.conda
+  sha256: 13f3ac3a447c3964441609b30dc1414650dd8006d9cc376ae84776fc5541e08e
+  md5: 2ae6ffdef3a259b622995efca9b84728
+  depends:
+  - python
+  - ros-kilted-builtin-interfaces
+  - ros-kilted-geometry-msgs
+  - ros-kilted-rclpy
+  - ros-kilted-ros-workspace
+  - ros-kilted-sensor-msgs
+  - ros-kilted-std-msgs
+  - ros-kilted-tf2-msgs
+  - ros-kilted-tf2-py
+  - ros2-distro-mutex 0.17.* kilted_*
+  - libstdcxx >=14
+  - libgcc >=14
+  - __glibc >=2.17,<3.0.a0
+  - numpy >=1.25,<3
+  - ros2-distro-mutex >=0.17.0,<0.18.0a0
+  - python_abi 3.12.* *_cp312
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 48808
+  timestamp: 1783567213108
 - conda: https://prefix.dev/robostack-kilted/linux-64/ros-kilted-tracetools-8.6.0-np2py312h2ed9cc7_21.conda
   sha256: bea146c0a1d2b35d8c7954296c355cda5347fe5cd0ac12a5766bf2b36e18c9f5
   md5: 752ee26411e5e973471525e511ab8016
@@ -24308,6 +24669,26 @@ packages:
   run_exports: {}
   size: 291805
   timestamp: 1783546072843
+- conda: https://prefix.dev/robostack-kilted/osx-arm64/ros-kilted-tf2-0.41.6-np2py312h50b1e4c_21.conda
+  sha256: 101384eb8b5aaee9d0431d86e3a94593f34c722d7caae9542790a4d16a1fee95
+  md5: f367af19f022229d2cea876cc778c421
+  depends:
+  - python
+  - ros-kilted-builtin-interfaces
+  - ros-kilted-geometry-msgs
+  - ros-kilted-rcutils
+  - ros-kilted-ros-workspace
+  - ros-kilted-rosidl-runtime-cpp
+  - ros2-distro-mutex 0.17.* kilted_*
+  - __osx >=11.0
+  - libcxx >=18
+  - python_abi 3.12.* *_cp312
+  - ros2-distro-mutex >=0.17.0,<0.18.0a0
+  - numpy >=1.25,<3
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 124306
+  timestamp: 1783547924463
 - conda: https://prefix.dev/robostack-kilted/osx-arm64/ros-kilted-tf2-msgs-0.41.6-np2py312h50b1e4c_21.conda
   sha256: 6857a9ea8a2af8142da1847e625006b2962b474a8fbe4ff90620beec781d195f
   md5: a1064f0ffc6dd4175fa4ef5d30b3f2eb
@@ -24327,6 +24708,50 @@ packages:
   run_exports: {}
   size: 232481
   timestamp: 1783547035599
+- conda: https://prefix.dev/robostack-kilted/osx-arm64/ros-kilted-tf2-py-0.41.6-np2py312h50b1e4c_21.conda
+  sha256: 51bbc4b8e6ad8afb1f3942f766ae22ee0ea450cfcc5d7b6f351e646403edb419
+  md5: 6f081fd8a3df5072691101010ee48868
+  depends:
+  - python
+  - ros-kilted-builtin-interfaces
+  - ros-kilted-geometry-msgs
+  - ros-kilted-rclpy
+  - ros-kilted-ros-workspace
+  - ros-kilted-rpyutils
+  - ros-kilted-tf2
+  - ros2-distro-mutex 0.17.* kilted_*
+  - __osx >=11.0
+  - libcxx >=18
+  - ros2-distro-mutex >=0.17.0,<0.18.0a0
+  - numpy >=1.25,<3
+  - python_abi 3.12.* *_cp312
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 50594
+  timestamp: 1783548704583
+- conda: https://prefix.dev/robostack-kilted/osx-arm64/ros-kilted-tf2-ros-py-0.41.6-np2py312h50b1e4c_21.conda
+  sha256: 62294aea54f1c7edad3c6fad690784a670a1dd43a0cc7fdd07f47cdd5e11c41a
+  md5: 3120aae8feee2cac969a00c8e4f35a0d
+  depends:
+  - python
+  - ros-kilted-builtin-interfaces
+  - ros-kilted-geometry-msgs
+  - ros-kilted-rclpy
+  - ros-kilted-ros-workspace
+  - ros-kilted-sensor-msgs
+  - ros-kilted-std-msgs
+  - ros-kilted-tf2-msgs
+  - ros-kilted-tf2-py
+  - ros2-distro-mutex 0.17.* kilted_*
+  - __osx >=11.0
+  - libcxx >=18
+  - numpy >=1.25,<3
+  - python_abi 3.12.* *_cp312
+  - ros2-distro-mutex >=0.17.0,<0.18.0a0
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 49553
+  timestamp: 1783549436359
 - conda: https://prefix.dev/robostack-kilted/osx-arm64/ros-kilted-tracetools-8.6.0-np2py312h50b1e4c_21.conda
   sha256: 82cce66ba6e325e563a8e12b2fbd07aa7dccd6a373c56df10aad19dc1116bb99
   md5: e2db1a599dce661e5f842acfe79d52fe
@@ -24524,6 +24949,14 @@ packages:
   run_exports: {}
   size: 2029
   timestamp: 1789509626501
+- conda: https://prefix.dev/robostack-lyrical/linux-64/ros-lyrical-tf2-ros-py-0.45.9-hb0f4dca_25.conda
+  sha256: 31aea6f01cb3f40a2c6024cf50016583aa1acb5c3b60e7ac320a33da9db2d33d
+  md5: 7f97597defc1856c6df6d2d5f0e3ccf6
+  depends:
+  - ros2-tf2-ros-py ==0.45.9
+  run_exports: {}
+  size: 2038
+  timestamp: 1789512535908
 - conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-action-msgs-2.4.5-np2py314hb48eaa3_25.conda
   sha256: f4550a448e2dfccdcf422f6e61f0669bb427c83ed31a72269738c2675f332260
   md5: fc4d371d266c2ce97be65cd300a11a93
@@ -27191,6 +27624,27 @@ packages:
   run_exports: {}
   size: 388809
   timestamp: 1789509052530
+- conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-tf2-0.45.9-np2py314hb48eaa3_25.conda
+  sha256: 30c6a2c8904be1c8ab2d0a222d272ac046680a9a25a3f299400da9108405c519
+  md5: c3d9ab4424dceeb6cc3b2291476a5339
+  depends:
+  - python
+  - ros2-builtin-interfaces
+  - ros2-distro-mutex 0.20.* lyrical_*
+  - ros2-geometry-msgs
+  - ros2-rcutils
+  - ros2-ros-workspace
+  - ros2-rosidl-runtime-cpp
+  - libgcc >=14
+  - libstdcxx >=14
+  - __glibc >=2.28,<3.0.a0
+  - ros2-distro-mutex >=0.20.0,<0.21.0a0
+  - python_abi 3.14.* *_cp314
+  - numpy >=1.25,<3
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 135336
+  timestamp: 1789509507965
 - conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-tf2-msgs-0.45.9-np2py314hb48eaa3_25.conda
   sha256: e5cd085f511701699fe8d9e43ea53f0dfe42d8edf672b8620cbe9f114b23be61
   md5: 14782a786b46e5a8ea21ba12491a4aa9
@@ -27211,6 +27665,51 @@ packages:
   run_exports: {}
   size: 272277
   timestamp: 1789509402047
+- conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-tf2-py-0.45.9-np2py314hb48eaa3_25.conda
+  sha256: 98e744175212c6e813d4d6bccac0df493a57acf682c0b3d509b4895aa50f6aa1
+  md5: dc470fdff504b8cd220e10b0507b7189
+  depends:
+  - python
+  - ros2-builtin-interfaces
+  - ros2-distro-mutex 0.20.* lyrical_*
+  - ros2-geometry-msgs
+  - ros2-rclpy
+  - ros2-ros-workspace
+  - ros2-rpyutils
+  - ros2-tf2
+  - libstdcxx >=14
+  - libgcc >=14
+  - __glibc >=2.28,<3.0.a0
+  - python_abi 3.14.* *_cp314
+  - numpy >=1.25,<3
+  - ros2-distro-mutex >=0.20.0,<0.21.0a0
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 60235
+  timestamp: 1789511428242
+- conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-tf2-ros-py-0.45.9-np2py314hb48eaa3_25.conda
+  sha256: 36398e84651adfc9920e445e3b5a20a0d6b50ad5a1fac4888af0ef410ee73534
+  md5: f90668ade66de8bd718d44809421650b
+  depends:
+  - python
+  - ros2-distro-mutex 0.20.* lyrical_*
+  - ros2-geometry-msgs
+  - ros2-rclpy
+  - ros2-ros-workspace
+  - ros2-sensor-msgs
+  - ros2-std-msgs
+  - ros2-tf2-msgs
+  - ros2-tf2-py
+  - libstdcxx >=14
+  - libgcc >=14
+  - __glibc >=2.28,<3.0.a0
+  - python_abi 3.14.* *_cp314
+  - numpy >=1.25,<3
+  - ros2-distro-mutex >=0.20.0,<0.21.0a0
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 43816
+  timestamp: 1789511721141
 - conda: https://prefix.dev/robostack-lyrical/linux-64/ros2-tracetools-8.10.2-np2py314hb48eaa3_25.conda
   sha256: 28e5de707cb10a6f854fd0ffe4b8d6d18a9ec17ad76c4eb95a7694d4571aa00a
   md5: c829f03c615c962b557a5b67e8410dd2
@@ -27401,6 +27900,14 @@ packages:
   run_exports: {}
   size: 2012
   timestamp: 1789516361040
+- conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros-lyrical-tf2-ros-py-0.45.9-h60d57d3_25.conda
+  sha256: 6e695efd1d6afa4defb4e7c1d9c088d062a370d5b60fe0ea808f3d9b9b1642d2
+  md5: 276b088c6e5480234e267babafb37f2b
+  depends:
+  - ros2-tf2-ros-py ==0.45.9
+  run_exports: {}
+  size: 2025
+  timestamp: 1789521568633
 - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-action-msgs-2.4.5-np2py314h2e2674b_25.conda
   sha256: 9e8e3dcb5b406ca88480047f411144533a8ccd111f5512ed908d6c37e8cad5bd
   md5: 633d09b3511263801e600e5a2ec6f2f4
@@ -29945,6 +30452,26 @@ packages:
   run_exports: {}
   size: 314786
   timestamp: 1789513767085
+- conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-tf2-0.45.9-np2py314h2e2674b_25.conda
+  sha256: 10b1d80c26eeb301e707cd2dccf5944862e2aef15a76a7b67de89e803130b26d
+  md5: 806f60baadba1c05fceda0d0f76bc6e7
+  depends:
+  - python
+  - ros2-builtin-interfaces
+  - ros2-distro-mutex 0.20.* lyrical_*
+  - ros2-geometry-msgs
+  - ros2-rcutils
+  - ros2-ros-workspace
+  - ros2-rosidl-runtime-cpp
+  - libcxx >=19
+  - __osx >=11.0
+  - numpy >=1.25,<3
+  - ros2-distro-mutex >=0.20.0,<0.21.0a0
+  - python_abi 3.14.* *_cp314
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 127392
+  timestamp: 1789515577051
 - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-tf2-msgs-0.45.9-np2py314h2e2674b_25.conda
   sha256: 805d9db6d2753e6b46ed5f69445c9df8614815771e20f218f4f2fdcfda4d3d7e
   md5: 6de21419b74b0b32d0dd436f2505bd33
@@ -29964,6 +30491,49 @@ packages:
   run_exports: {}
   size: 242792
   timestamp: 1789515227752
+- conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-tf2-py-0.45.9-np2py314h2e2674b_25.conda
+  sha256: 4ec7f95891ec957ec88119438eb0e3f32a838eac4440327a94a080746af0bc02
+  md5: 38dba5e9ac8efe170a342bb9ab465973
+  depends:
+  - python
+  - ros2-builtin-interfaces
+  - ros2-distro-mutex 0.20.* lyrical_*
+  - ros2-geometry-msgs
+  - ros2-rclpy
+  - ros2-ros-workspace
+  - ros2-rpyutils
+  - ros2-tf2
+  - __osx >=11.0
+  - libcxx >=19
+  - numpy >=1.25,<3
+  - python_abi 3.14.* *_cp314
+  - ros2-distro-mutex >=0.20.0,<0.21.0a0
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 53274
+  timestamp: 1789518399775
+- conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-tf2-ros-py-0.45.9-np2py314h2e2674b_25.conda
+  sha256: d126c6c6ab1cd1d2235f55a048e08b086e55523fa00d7a2c673afbdfee38bd48
+  md5: 544142234748143ebfa648a84d7c4abd
+  depends:
+  - python
+  - ros2-distro-mutex 0.20.* lyrical_*
+  - ros2-geometry-msgs
+  - ros2-rclpy
+  - ros2-ros-workspace
+  - ros2-sensor-msgs
+  - ros2-std-msgs
+  - ros2-tf2-msgs
+  - ros2-tf2-py
+  - __osx >=11.0
+  - libcxx >=19
+  - numpy >=1.25,<3
+  - ros2-distro-mutex >=0.20.0,<0.21.0a0
+  - python_abi 3.14.* *_cp314
+  license: BSD-3-Clause
+  run_exports: {}
+  size: 44866
+  timestamp: 1789520471905
 - conda: https://prefix.dev/robostack-lyrical/osx-arm64/ros2-tracetools-8.10.2-np2py314h2e2674b_25.conda
   sha256: f77fabea2298bd6d382471944e7321a4a809319aed30fb05b9c4a6f7c34791be
   md5: 8537c92bfdbb15cfdf91a20329a42e9f

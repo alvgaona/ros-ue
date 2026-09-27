@@ -8,7 +8,7 @@ THIRD_PARTY_INCLUDES_END
 
 namespace ros
 {
-	enum class Qos { Reliable, SensorData };
+	enum class Qos { Reliable, SensorData, DynamicBroadcaster };
 
 	struct QosDeleter { void operator()(dds_qos_t* Profile) const { dds_delete_qos(Profile); } };
 

@@ -12,7 +12,9 @@ cd "$(dirname "$0")/.."
 # The checker starts first, so it hears everything the actor announces
 pixi run -e "${3:-default}" env RMW_IMPLEMENTATION="${4:-rmw_cyclonedds_cpp}" python "Checks/$2" &
 CHECKER=$!
+# A fixed 60 fps, as the README recommends: every step is 1/60 s and game time keeps pace with the wall clock
 "$UE/Binaries/Mac/UnrealEditor.app/Contents/MacOS/UnrealEditor" "$HOST" /Engine/Maps/Entry -game -nullrhi -unattended -nosplash -nosound -stdout -FullStdOutLogOutput \
+  "-ini:Engine:[/Script/Engine.Engine]:bUseFixedFrameRate=True,[/Script/Engine.Engine]:FixedFrameRate=60" \
   -ExecCmds="summon /Script/RosBridge.$1" > "$LOG" 2>&1 &
 UNREAL=$!
 wait $CHECKER
