@@ -11,7 +11,7 @@ namespace ros
 {
 	// Sim time from the game instance's world, published on /clock once per frame before actors tick, so no stamp runs
 	// ahead of it. The plugin's only source of time: another clock mode would change only this class.
-	class ROSBRIDGE_API Clock
+	class Clock
 	{
 	public:
 		Clock(const UGameInstance& InGameInstance, Publisher<rosgraph_msgs::msg::Clock> InPublisher);
@@ -28,7 +28,4 @@ namespace ros
 		Publisher<rosgraph_msgs::msg::Clock> ClockPublisher;
 		FDelegateHandle TickHandle;
 	};
-
-	// The sim time of WorldContext's game instance, for message stamps.
-	ROSBRIDGE_API builtin_interfaces::msg::Time Now(const UObject* WorldContext);
 }

@@ -1,6 +1,8 @@
 #include "Ros.h"
 #include "Engine/GameInstance.h"
 #include "Engine/World.h"
+#include "RosClock.h"
+#include "RosQosProfile.h"
 
 URos* URos::Get(const UObject* WorldContext)
 {
@@ -15,7 +17,7 @@ void URos::Initialize(FSubsystemCollectionBase&)
 	// 0 when unset, same as ROS
 	const int32 Domain = FCString::Atoi(*FPlatformMisc::GetEnvironmentVariable(TEXT("ROS_DOMAIN_ID")));
 	Participant = dds_create_participant(Domain, nullptr, nullptr);
-	Clock = MakeUnique<ros::Clock>(*GetGameInstance(), ros::Publisher<rosgraph_msgs::msg::Clock>(
+	Clock = MakeShared<ros::Clock>(*GetGameInstance(), ros::Publisher<rosgraph_msgs::msg::Clock>(
 		CreatePublisher(TEXT("/clock"), ros::TypeSupportOf<rosgraph_msgs::msg::Clock>(), ros::Qos::Reliable)));
 }
 
@@ -57,4 +59,13 @@ void URos::Tick(float)
 		if (const TSharedPtr<ros::Reader> Reader = Spinning[I].Pin())
 			Reader->Spin();
 	Spinning.RemoveAll([](const TWeakPtr<ros::Reader>& Weak) { return !Weak.IsValid(); });
+}
+
+namespace ros
+{
+	builtin_interfaces::msg::Time Now(const UObject* WorldContext)
+	{
+		const URos* Ros = URos::Get(WorldContext);
+		return Ros ? Ros->Now() : builtin_interfaces::msg::Time{};
+	}
 }

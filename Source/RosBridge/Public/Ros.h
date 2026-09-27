@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Tickable.h"
-#include "RosClock.h"
+#include "RosMessages.h"
 #include "RosPublisher.h"
 #include "RosQos.h"
 #include "RosStaticTransformBroadcaster.h"
@@ -13,6 +13,8 @@
 #include "Ros.generated.h"
 
 ROSBRIDGE_API DECLARE_LOG_CATEGORY_EXTERN(LogRos, Log, All);
+
+namespace ros { class Clock; }
 
 // One per game instance: the DDS participant that serves every publisher and subscription in it.
 // Not a ROS node. Callbacks run on the game thread.
@@ -41,7 +43,7 @@ private:
 	dds_entity_t MakeTopic(const ros::TypeSupport& Type, const FString& Topic);
 
 	dds_entity_t Participant = 0;
-	TUniquePtr<ros::Clock> Clock;
+	TSharedPtr<ros::Clock> Clock; // not TUniquePtr, whose deleter would need the private ros::Clock in UHT's generated constructors
 	TArray<TWeakPtr<ros::Reader>> Spinning;
 };
 
@@ -61,4 +63,7 @@ namespace ros
 		return Ros ? Ros->CreateSubscription(Topic, TypeSupportOf<T>(), Profile,
 			[Callback = MoveTemp(Callback)](const void* Sample) { Callback(*static_cast<const T*>(Sample)); }) : Subscription();
 	}
+
+	// The sim time of WorldContext's game instance, for message stamps.
+	ROSBRIDGE_API builtin_interfaces::msg::Time Now(const UObject* WorldContext);
 }

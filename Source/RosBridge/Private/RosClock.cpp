@@ -1,7 +1,6 @@
 #include "RosClock.h"
 #include "Engine/GameInstance.h"
 #include "Engine/World.h"
-#include "Ros.h"
 #include "RosConversions.h"
 
 namespace ros
@@ -29,11 +28,5 @@ namespace ros
 		// Every world ticks through this delegate, the editor's included
 		if (World->GetGameInstance() == &GameInstance)
 			ClockPublisher.Publish({ ToTime(World->GetTimeSeconds()) });
-	}
-
-	builtin_interfaces::msg::Time Now(const UObject* WorldContext)
-	{
-		const URos* Ros = URos::Get(WorldContext);
-		return Ros ? Ros->Now() : builtin_interfaces::msg::Time{};
 	}
 }
