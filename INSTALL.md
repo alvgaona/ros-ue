@@ -12,7 +12,7 @@ You don't need ROS on the machine that runs Unreal. The plugin talks to ROS 2 ov
 
 ## From a release (macOS)
 
-1. Download `RosBridge-<version>-Mac.zip` from the [releases](https://github.com/alvgaona/ros-ue/releases). It contains the plugin's source with Cyclone DDS and the ROS message types already built.
+1. Download `ros-ue-<version>-macos-arm64.zip` from the [releases](https://github.com/alvgaona/ros-ue/releases). It contains the plugin's source with Cyclone DDS and the ROS message types already built.
 2. Unzip it into your project, so you have `<YourProject>/Plugins/RosBridge/RosBridge.uplugin`.
 3. Open the project and let Unreal build the plugin when it asks.
 

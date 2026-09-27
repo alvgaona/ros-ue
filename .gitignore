@@ -1,5 +1,6 @@
 Binaries/
 Intermediate/
 ThirdParty/
+dist/
 .pixi/
 node_modules/

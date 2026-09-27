@@ -20,6 +20,7 @@ channels = ["https://prefix.dev/robostack-jazzy"]
 
 [feature.jazzy.tasks]
 setup = "sh Scripts/setup.sh"
+package = "sh Scripts/package.sh"
 
 [feature.jazzy.dependencies]
 ros-jazzy-demo-nodes-cpp = ">=0.33.11,<0.34"

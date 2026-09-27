@@ -30,6 +30,7 @@ One concept per file, named after the rclcpp or tf2_ros header it copies. Our ty
 - `Source/RosBridgeChecks` is a third module, `UncookedOnly` in `RosBridge.uplugin`, so the editor loads it and packaged games never contain it. It uses only `RosBridge`'s and `RosSim`'s public headers, as a user's module would. Its `HelloRos` is `demo_nodes_cpp`'s talker and listener in one actor, and the end-to-end check. Actors that only exist for checks go in it, and the Python that judges them goes in `Checks/` at the root, as with `ClockCheck` and `clock.py`, `TfCheck` with `tf.py` and `tf_static.py`, `ImageCheck` with `image.py`, or `CameraCheck` with `camera.py`.
 - Its `Private/Tests/` has automation tests for code that needs no ROS, one behavior per test.
 - `Scripts/setup.sh`, run as `pixi run setup`, builds Cyclone DDS and every message in its `PACKAGES` into `ThirdParty/`. That directory is generated and ignored; don't edit it.
+- `Scripts/package.sh`, run as `pixi run package` after `setup`, zips the plugin with `ThirdParty/` prebuilt into `dist/ros-ue-<version>-<os>-<arch>.zip` for a release, with the licenses in `Scripts/licenses/`. A new message package needs its license listed there.
 - `Scripts/idl.py` rewrites the IDL that ROS ships in the pixi environment (`share/<pkg>/msg/`) under the names ROS 2 uses on the wire, and writes `RosMessages.h`. Never hand-write message IDL.
 
 ## Things that bite
