@@ -92,8 +92,17 @@ ros-lyrical-rosgraph-msgs = ">=2.4.5,<3"
 ros-lyrical-rcl-interfaces = ">=2.4.5,<3"
 ros-lyrical-tf2-ros-py = ">=0.45.9,<0.46"
 
+[feature.lint.tasks]
+lint = "ruff check && ruff format --check && git ls-files '*.cpp' '*.h' | xargs clang-format --dry-run --Werror"
+format = "ruff check --fix && ruff format && git ls-files '*.cpp' '*.h' | xargs clang-format -i"
+
+[feature.lint.dependencies]
+ruff = ">=0.16.9,<0.17"
+clang-format = ">=23.1.2,<24"
+
 [environments]
 default = ["jazzy"]
 humble = ["humble"]
 kilted = ["kilted"]
 lyrical = ["lyrical"]
+lint = { features = ["lint"], no-default-feature = true }

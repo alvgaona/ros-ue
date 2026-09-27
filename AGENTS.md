@@ -10,7 +10,7 @@ Unreal Engine 5 plugin, `RosBridge`, that talks to ROS 2 as a plain Cyclone DDS 
 - `RosBridge` is only the ROS 2 client. `RosSim` holds only components that are hard to build on it, the camera for now. Vehicles, controllers and simple sensors such as an IMU are not the library's: users model them and publish through `RosBridge`.
 - Callbacks run on the game thread because `URos::Tick` drains every reader each frame. Don't move them to DDS listeners, which fire on Cyclone's threads.
 - Cyclone DDS is linked statically and pinned in `Scripts/setup.sh` to 0.10.5, the release Humble, Jazzy and Kilted ship. Lyrical ships Cyclone 11, which talks to it fine.
-- `pixi.toml` has one environment per distro. The default is Jazzy, the source of the generated messages, so `setup` exists only there; Humble ships no type hashes, which `idl.py` needs. `humble`, `kilted` and `lyrical` are test peers only.
+- `pixi.toml` has one environment per distro. The default is Jazzy, the source of the generated messages, so `setup` exists only there; Humble ships no type hashes, which `idl.py` needs. `humble`, `kilted` and `lyrical` are test peers only. `lint` has only ruff and clang-format.
 - macOS arm64 and Linux x86_64 only, the platforms in `pixi.toml` and `RosBridge.uplugin`.
 
 ## Layout
@@ -97,5 +97,6 @@ Repeat against the other distros with `-e humble`, `-e kilted` and `-e lyrical` 
 ## Style
 
 - Unreal C++ conventions (tabs, Unreal containers and strings), without the `F`, `T` and `E` prefixes on our own types. `U` and `A` stay on UCLASSes only, because Unreal's header tool rejects a UCLASS without them. Wrap Cyclone and generated message headers in `THIRD_PARTY_INCLUDES_START`/`END`.
+- `pixi run -e lint format` formats the C++ with `.clang-format` and the Python with `ruff.toml`, and `pixi run -e lint lint` checks both, as CI does. Run it before committing.
 - Comments are one line and only for a non-obvious constraint. A `ponytail:` comment marks a deliberate shortcut and names its upgrade path.
 - Conventional commits. Markdown is not hard-wrapped.

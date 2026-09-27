@@ -1,0 +1,41 @@
+BasedOnStyle: LLVM
+UseTab: ForContinuationAndIndentation
+IndentWidth: 4
+TabWidth: 4
+ContinuationIndentWidth: 4
+ColumnLimit: 0
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterCaseLabel: true
+  AfterClass: true
+  AfterControlStatement: Always
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  AfterUnion: true
+  AfterExternBlock: true
+  BeforeCatch: true
+  BeforeElse: true
+  BeforeLambdaBody: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+NamespaceIndentation: All
+FixNamespaceComments: false
+AccessModifierOffset: -4
+PointerAlignment: Left
+AlignAfterOpenBracket: DontAlign
+AlignOperands: DontAlign
+Cpp11BracedListStyle: false
+SpaceAfterTemplateKeyword: false
+BreakConstructorInitializers: BeforeComma
+PackConstructorInitializers: Never
+AllowShortFunctionsOnASingleLine: All
+AllowShortLambdasOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortNamespacesOnASingleLine: true
+AllowShortBlocksOnASingleLine: Always
+SortIncludes: Never
+MacroBlockBegin: "^BEGIN_SHADER_PARAMETER_STRUCT"
+MacroBlockEnd: "^END_SHADER_PARAMETER_STRUCT"

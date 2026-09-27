@@ -1,6 +1,11 @@
 # CI
 
-[`ci.yaml`](ci.yaml) runs `setup` on every PR and push to main. It installs the default pixi environment and runs `pixi run setup`, which builds Cyclone DDS and compiles every generated message type, so a change to `Scripts/` or a pixi bump that breaks generation fails here. Hosted runners have no Unreal, so the plugin itself is only built and checked locally (see `AGENTS.md`). The job runs on Linux only, since macOS minutes bill ten times over on a private repo.
+[`ci.yaml`](ci.yaml) runs two jobs on every PR and push to main, on Linux only, since macOS minutes bill ten times over on a private repo.
+
+- `messages` installs the default pixi environment and runs `pixi run setup`, which builds Cyclone DDS and compiles every generated message type, so a change to `Scripts/` or a pixi bump that breaks generation fails here.
+- `lint` installs the `lint` environment and runs `pixi run -e lint lint`: ruff on the Python and clang-format on the C++, both checking only. `pixi run -e lint format` fixes what it can. The shader isn't formatted, since clang-format doesn't understand HLSL.
+
+Hosted runners have no Unreal, so the plugin itself is only built and checked locally (see `AGENTS.md`), and there is no clang-tidy, which needs the engine's compile commands.
 
 ## Releases
 
