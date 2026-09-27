@@ -25,8 +25,8 @@ One concept per file, named after the rclcpp or tf2_ros header it copies. Our ty
 - `RosStaticTransformBroadcaster.h` has `ros::StaticTransformBroadcaster`, on `/tf_static` with `Qos::StaticBroadcaster`, which is transient local. Like tf2_ros's, it keeps every frame it was given and resends them all on each call, since a late subscriber only gets the last message.
 - `RosTypeSupport.h` has `ROS_MESSAGE`, which gives a generated message struct its DDS descriptor and ROS 2 type hash. It is the only header without a `.cpp`.
 - `RosMessages.h` is generated into `ThirdParty/msgs/`. It gives every generated message its ROS 2 C++ name (`std_msgs::msg::String`) and registers it with `ROS_MESSAGE`, so there's nothing to register by hand.
-- `Private/Checks/HelloRos` is `demo_nodes_cpp`'s talker and listener in one actor, and the end-to-end check. Actors that only exist for checks go in `Private/Checks/`, and the Python that judges them goes in `Checks/` at the root, as with `ClockCheck` and `clock.py`, or `TfCheck` with `tf.py` and `tf_static.py`.
-- `Private/Tests/` has automation tests for code that needs no ROS, one behavior per test.
+- `Source/RosBridgeChecks` is a second module, `UncookedOnly` in `RosBridge.uplugin`, so the editor loads it and packaged games never contain it. It uses only `RosBridge`'s public headers, as a user's module would. Its `HelloRos` is `demo_nodes_cpp`'s talker and listener in one actor, and the end-to-end check. Actors that only exist for checks go in it, and the Python that judges them goes in `Checks/` at the root, as with `ClockCheck` and `clock.py`, or `TfCheck` with `tf.py` and `tf_static.py`.
+- Its `Private/Tests/` has automation tests for code that needs no ROS, one behavior per test.
 - `Scripts/setup.sh`, run as `pixi run setup`, builds Cyclone DDS and every message in its `PACKAGES` into `ThirdParty/`. That directory is generated and ignored; don't edit it.
 - `Scripts/idl.py` rewrites the IDL that ROS ships in the pixi environment (`share/<pkg>/msg/`) under the names ROS 2 uses on the wire, and writes `RosMessages.h`. Never hand-write message IDL.
 
@@ -59,7 +59,7 @@ UE="/Users/Shared/Epic Games/UE_5.8/Engine"
 HOST="$HOME/Documents/Unreal Projects/RosBridgeHost/RosBridgeHost.uproject"
 "$UE/Build/BatchFiles/Mac/Build.sh" RosBridgeHostEditor Mac Development -Project="$HOST" -NoHotReload
 "$UE/Binaries/Mac/UnrealEditor.app/Contents/MacOS/UnrealEditor" "$HOST" -ExecCmds="Automation RunTests RosBridge" -testexit="Automation Test Queue Empty" -unattended -nullrhi -nosplash -stdout
-"$UE/Binaries/Mac/UnrealEditor.app/Contents/MacOS/UnrealEditor" "$HOST" /Engine/Maps/Entry -game -nullrhi -unattended -stdout -ExecCmds="summon /Script/RosBridge.HelloRos"
+"$UE/Binaries/Mac/UnrealEditor.app/Contents/MacOS/UnrealEditor" "$HOST" /Engine/Maps/Entry -game -nullrhi -unattended -stdout -ExecCmds="summon /Script/RosBridgeChecks.HelloRos"
 ```
 
 Each automation test logs `Test Completed. Result={Success}` with its name.

@@ -11,6 +11,11 @@
       "Name": "RosBridge",
       "Type": "Runtime",
       "LoadingPhase": "Default"
+    },
+    {
+      "Name": "RosBridgeChecks",
+      "Type": "UncookedOnly",
+      "LoadingPhase": "Default"
     }
   ]
 }

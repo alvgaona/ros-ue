@@ -16,7 +16,7 @@ Put this folder in a C++ project's `Plugins/` folder (for example `Plugins/RosBr
 
 ## Hello world
 
-Drop a `HelloRos` actor in a level (Window → Place Actors, search for "Hello") and press Play. It publishes `Hello World: N` on `/chatter` every second and logs everything it hears there, its own messages included.
+Drop a `HelloRos` actor in a level (Window → Place Actors, search for "Hello") and press Play. It publishes `Hello World: N` on `/chatter` every second and logs everything it hears there, its own messages included. Like the plugin's other check actors, it exists only in the editor and never ends up in a packaged game.
 
 ```sh
 pixi run listener   # prints what Unreal publishes
