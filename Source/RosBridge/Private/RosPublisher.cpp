@@ -1,4 +1,5 @@
 #include "RosPublisher.h"
+#include "Ros.h"
 
 namespace ros
 {
@@ -30,7 +31,14 @@ namespace ros
 
 	void PublisherBase::Write(const void* Sample) const
 	{
-		if (ensureMsgf(Writer > 0, TEXT("Publish on an empty ros::Publisher")))
-			dds_write(Writer, Sample); // serializes before returning, so the sample may point at temporaries
+		if (!ensureMsgf(Writer > 0, TEXT("Publish on an empty ros::Publisher")))
+			return;
+		const dds_return_t Result = dds_write(Writer, Sample); // serializes before returning, so the sample may point at temporaries
+		if (Result < 0)
+		{
+			char Topic[256] = "";
+			dds_get_name(dds_get_topic(Writer), Topic, sizeof(Topic));
+			UE_LOG(LogRos, Warning, TEXT("DDS write on %s failed: %s"), UTF8_TO_TCHAR(Topic), UTF8_TO_TCHAR(dds_strretcode(Result)));
+		}
 	}
 }
