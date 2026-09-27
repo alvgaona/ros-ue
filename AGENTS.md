@@ -1,13 +1,13 @@
 # ros-ue
 
-Unreal Engine 5 plugin, `RosBridge`, that talks to ROS 2 as a plain Cyclone DDS participant. Read `README.md` first; it is the user-facing spec.
+Unreal Engine 5 plugin, `RosBridge`, that talks to ROS 2 as a plain Cyclone DDS participant. Read `README.md` first, then `Source/RosBridge/README.md` and `Source/RosSim/README.md`; together they are the user-facing spec.
 
 ## Constraints
 
 - It is not a ROS 2 node and must not become one. Don't add rclcpp, rcl or rmw. Building it needs no ROS install, and ROS in `pixi.toml` is only the test peer.
 - There is no node concept inside either. `URos`, one per game instance, owns the DDS participant and serves every publisher and subscription in that instance. If Unreal ever shows up in the ROS graph, it is one entry per game instance, with PIE clients numbered so names stay unique.
 - The API follows rclcpp's shape and names. `ros::Qos` works like `rclcpp::QoS`, and each named preset copies an rclcpp or tf2_ros one.
-- `RosBridge` is only the ROS 2 client. `RosSim` holds only components that are hard to build on it, the camera for now. Vehicles, controllers and simple sensors such as an IMU are not the library's: users model them and publish through `RosBridge`.
+- `RosBridge` is only the ROS 2 client. `RosSim` gives ROS output to things Unreal already has, such as its cameras. Sensors Unreal doesn't have, such as lidars and IMUs, and robots, vehicles and controllers, are for users or other libraries to build on `RosBridge`.
 - Callbacks run on the game thread because `URos::Tick` drains every reader each frame. Don't move them to DDS listeners, which fire on Cyclone's threads.
 - Cyclone DDS is linked statically and pinned in `Scripts/setup.sh` to 0.10.5, the release Humble, Jazzy and Kilted ship. Lyrical ships Cyclone 11, which talks to it fine.
 - `pixi.toml` has one environment per distro. The default is Jazzy, the source of the generated messages, so `setup` exists only there; Humble ships no type hashes, which `idl.py` needs. `humble`, `kilted` and `lyrical` are test peers only. `lint` has only ruff and clang-format.
@@ -52,7 +52,7 @@ One concept per file, named after the rclcpp or tf2_ros header it copies. Our ty
 - Unreal advances game time before any actor ticks, and physics moves bodies between `TG_PrePhysics` and `TG_PostPhysics`. A physics body read before physics is the previous frame's pose under this frame's stamp, so send it from `TG_PostPhysics` or later. `TfCheck` measures this as 3f.
 - Game time in a headless run goes about six times faster than the wall clock. Frames there beat 2000 fps, and Unreal counts each as at least `MinUndilatedFrameTime`, 0.5 ms in the engine's `BaseGame.ini`. `Checks/run.sh` fixes the frame rate at 60 with an `-ini` override, which makes every step 1/60 s and holds game time to the wall clock. Don't read timing from a headless run without it.
 - On macOS, don't read the GPU back through a texture. Metal's `RHIMapStagingSurface` and its texture lock both wait for the GPU to go idle, even when the copy is done, which stalls the render thread; its staging buffers only wait for a copy that isn't done. Vulkan waits for neither.
-- Large messages need big socket receive buffers where they're received. Cyclone asks for 1 MiB unless `SocketReceiveBufferSize` says otherwise, and macOS caps a socket at about 7 MiB until `kern.ipc.maxsockbuf` goes up, which it accepts only to 16 MiB, a sixteenth of the kernel's 256 MiB network buffer pool on Alvaro's Mac. On 2026-09-27, at 1 MiB even 640×480 best-effort images got lost, and at 14 MiB reliable 4K arrived at 30 per second. The README has the table.
+- Large messages need big socket receive buffers where they're received. Cyclone asks for 1 MiB unless `SocketReceiveBufferSize` says otherwise, and macOS caps a socket at about 7 MiB until `kern.ipc.maxsockbuf` goes up, which it accepts only to 16 MiB, a sixteenth of the kernel's 256 MiB network buffer pool on Alvaro's Mac. On 2026-09-27, at 1 MiB even 640×480 best-effort images got lost, and at 14 MiB reliable 4K arrived at 30 per second. `Source/RosBridge/README.md` has the table.
 
 ## Verifying changes
 
@@ -88,7 +88,7 @@ RHI=-RenderOffscreen sh Checks/run.sh CameraCheck camera.py
 CAMERA_RAW=off RHI=-RenderOffscreen sh Checks/run.sh CameraCheck camera.py
 ```
 
-`ImageCheck` and `image.py` both read `IMAGE_SIZE`, 640x480 by default, and `IMAGE_QOS`, one of `default`, `keep1` and `sensor`. Only 640×480 with the default QoS has to deliver every image; the rest report what arrived, and past 640×480 best effort needs the socket buffers the README describes.
+`ImageCheck` and `image.py` both read `IMAGE_SIZE`, 640x480 by default, and `IMAGE_QOS`, one of `default`, `keep1` and `sensor`. Only 640×480 with the default QoS has to deliver every image; the rest report what arrived, and past 640×480 best effort needs the socket buffers `Source/RosBridge/README.md` describes.
 
 `CameraCheck` needs pictures, so `RHI=-RenderOffscreen` has Unreal render with Metal and no window instead of `-nullrhi`. Its cubes show gray in the first few images, until their material's shaders have loaded, and the first image in color can show the green cube a frame behind, as Unreal rebuilds it; `camera.py` judges the images after that one.
 
