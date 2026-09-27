@@ -1,5 +1,5 @@
 [workspace]
-name = "ue-ros-bridge"
+name = "ros-ue"
 channels = ["https://prefix.dev/conda-forge"]
 platforms = ["osx-arm64", "linux-64"]
 

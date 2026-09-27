@@ -1,5 +1,5 @@
 {
-  "name": "ue-ros-bridge",
+  "name": "ros-ue",
   "private": true,
   "scripts": {
     "prepare": "lefthook install"

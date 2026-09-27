@@ -1,4 +1,4 @@
-# ue-ros-bridge
+# ros-ue
 
 Unreal Engine 5 plugin, `RosBridge`, that talks to ROS 2 as a plain Cyclone DDS participant. Read `README.md` first; it is the user-facing spec.
 

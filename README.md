@@ -1,6 +1,6 @@
-# ue-ros-bridge
+# ros-ue
 
-[![CI](https://github.com/alvgaona/ue-ros-bridge/actions/workflows/ci.yaml/badge.svg)](https://github.com/alvgaona/ue-ros-bridge/actions/workflows/ci.yaml)
+[![CI](https://github.com/alvgaona/ros-ue/actions/workflows/ci.yaml/badge.svg)](https://github.com/alvgaona/ros-ue/actions/workflows/ci.yaml)
 ![Unreal Engine 5](https://img.shields.io/badge/Unreal_Engine-5-313131?logo=unrealengine&logoColor=ffffff)
 ![ROS 2](https://img.shields.io/badge/ROS_2-Humble_%7C_Jazzy_%7C_Kilted_%7C_Lyrical-22314e?logo=ros&logoColor=ffffff)
 
