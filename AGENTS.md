@@ -34,6 +34,7 @@ One concept per file, named after the rclcpp or tf2_ros header it copies. Our ty
 
 - ROS 2 matches on mangled names. The topic `/chatter` is `rt/chatter` on the wire (`URos::MakeTopic` adds the prefix), and `std_msgs/msg/String` is `std_msgs::msg::dds_::String_` (`idl.py` renames it). Get either wrong and nothing matches, with no error.
 - Keep `-x final` in `setup.sh` even though idlc 0.10.5 defaults to it. idlc warns the default may become appendable, and ROS 2 messages are final.
+- Keep type discovery off in `setup.sh`, so endpoints match on type names, as `rmw_cyclonedds`'s do. With it on, idlc embeds XTypes type objects in every message and Cyclone 0.10.5 matches on those instead. Kilted's Fast DDS 3.2 then never matched `tf2_msgs/msg/TFMessage`, and in one run Cyclone's discovery thread hung validating a type object, after which Unreal matched nothing new and froze on exit in `dds_delete`.
 - The setup script skips Cyclone when `ThirdParty/cyclonedds/lib/libddsc.a` exists. After changing its version or CMake flags, delete `ThirdParty/cyclonedds` and rerun. `ThirdParty/msgs` is rebuilt on every run.
 - `ros::CreatePublisher` and `ros::CreateSubscription` return move-only handles, and the endpoint lives exactly as long as its handle; `URos` only keeps weak pointers to readers. Hold handles in members and clear them with `= {}` in `EndPlay`, as `HelloRos` does. Otherwise they live until the actor is garbage-collected, and callbacks keep firing after `EndPlay`.
 - `FString`'s `==` ignores case, and ROS names don't. Compare frame ids and topics with `Equals(Other, ESearchCase::CaseSensitive)`.
@@ -80,7 +81,7 @@ sh Checks/run.sh TfCheck tf.py
 sh Checks/run.sh TfCheck tf_static.py
 ```
 
-Repeat against the other distros with `-e humble`, `-e kilted` and `-e lyrical` after `pixi run`. Lyrical's `demo_nodes_cpp` uses `example_interfaces/msg/String` instead of `std_msgs/msg/String`; its nodes still reach Unreal on Cyclone but not on Fast DDS. Test Lyrical with `pixi run -e lyrical ros2 topic echo /chatter std_msgs/msg/String` and `ros2 topic pub` instead. On 2026-09-26 all four distros passed both ways on both RMWs.
+Repeat against the other distros with `-e humble`, `-e kilted` and `-e lyrical` after `pixi run`. Lyrical's `demo_nodes_cpp` uses `example_interfaces/msg/String` instead of `std_msgs/msg/String`, so its nodes don't reach Unreal. Test Lyrical with `pixi run -e lyrical ros2 topic echo /chatter std_msgs/msg/String` and `ros2 topic pub` instead. On 2026-09-27 the hello world and every check passed on all four distros and both RMWs.
 
 ## Style
 

@@ -22,7 +22,9 @@ if [ ! -f "$DDS/lib/libddsc.a" ]; then
     -DENABLE_SECURITY=OFF \
     -DENABLE_SHM=OFF \
     -DBUILD_EXAMPLES=OFF \
-    -DBUILD_TESTING=OFF
+    -DBUILD_TESTING=OFF \
+    -DENABLE_TOPIC_DISCOVERY=OFF \
+    -DENABLE_TYPE_DISCOVERY=OFF # match on type names like rmw_cyclonedds; 0.10.5's XTypes matching fails with Kilted's Fast DDS
   cmake --build ThirdParty/cyclonedds-build --target install --parallel
 fi
 
