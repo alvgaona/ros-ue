@@ -49,6 +49,24 @@ ros::Publisher<sensor_msgs::msg::Image> Camera = ros::CreatePublisher<sensor_msg
 
 `ros::SensorDataQos`, `ros::DynamicBroadcasterQos` and `ros::StaticBroadcasterQos` copy the rclcpp and tf2_ros presets of the same names. A reliable subscription doesn't match a best-effort publisher, so match what the ROS side subscribes with.
 
+## Images
+
+A raw 1080p image in `bgra8` is 8.3 MB, which DDS sends as thousands of UDP fragments in one burst. A subscriber whose socket receive buffer can't hold the burst loses fragments: reliable QoS resends them at a lower rate, and best effort loses the whole image. Cyclone DDS asks for a 1 MiB receive buffer unless told otherwise, so give ROS nodes that subscribe to images a bigger one:
+
+```sh
+export CYCLONEDDS_URI='<CycloneDDS><Domain><Internal><SocketReceiveBufferSize max="14MiB"/></Internal></Domain></CycloneDDS>'
+```
+
+The operating system caps what a socket can get. macOS allows about 7 MiB by default, and `sudo sysctl -w kern.ipc.maxsockbuf=16777216` raises that to about 14 MiB, the most macOS accepts. On Linux, raise `net.core.rmem_max`. Measured on one Mac with Cyclone DDS on both sides, at 30 images a second:
+
+| Receive buffer | What arrives |
+|---|---|
+| 1 MiB, the default | 1080p with reliable QoS. Best effort loses images even at 640×480. |
+| 7 MiB | 1080p with any QoS. |
+| 14 MiB | 4K with reliable QoS and keep last 1. |
+
+Publishing holds Unreal's game thread for about 0.45 ms per MB, 3 ms for a 1080p image. Over a network, bandwidth runs out first: gigabit Ethernet carries about 15 raw 1080p images a second.
+
 ## Time
 
 Unreal governs time. Each game instance publishes its game time on `/clock` every frame, so run ROS nodes with `--ros-args -p use_sim_time:=true`. ROS time then holds while the game is paused, follows time dilation, and starts again from zero on each Play. Stamp messages with the same time:

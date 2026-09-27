@@ -25,7 +25,7 @@ One concept per file, named after the rclcpp or tf2_ros header it copies. Our ty
 - `RosStaticTransformBroadcaster.h` has `ros::StaticTransformBroadcaster`, on `/tf_static` with `StaticBroadcasterQos`, which is transient local. Like tf2_ros's, it keeps every frame it was given and resends them all on each call, since a late subscriber only gets the last message.
 - `RosTypeSupport.h` has `ROS_MESSAGE`, which gives a generated message struct its DDS descriptor and ROS 2 type hash. It and `RosQos.h` are the only public headers without a `.cpp`.
 - `RosMessages.h` is generated into `ThirdParty/msgs/`. It gives every generated message its ROS 2 C++ name (`std_msgs::msg::String`) and registers it with `ROS_MESSAGE`, so there's nothing to register by hand.
-- `Source/RosBridgeChecks` is a second module, `UncookedOnly` in `RosBridge.uplugin`, so the editor loads it and packaged games never contain it. It uses only `RosBridge`'s public headers, as a user's module would. Its `HelloRos` is `demo_nodes_cpp`'s talker and listener in one actor, and the end-to-end check. Actors that only exist for checks go in it, and the Python that judges them goes in `Checks/` at the root, as with `ClockCheck` and `clock.py`, or `TfCheck` with `tf.py` and `tf_static.py`.
+- `Source/RosBridgeChecks` is a second module, `UncookedOnly` in `RosBridge.uplugin`, so the editor loads it and packaged games never contain it. It uses only `RosBridge`'s public headers, as a user's module would. Its `HelloRos` is `demo_nodes_cpp`'s talker and listener in one actor, and the end-to-end check. Actors that only exist for checks go in it, and the Python that judges them goes in `Checks/` at the root, as with `ClockCheck` and `clock.py`, `TfCheck` with `tf.py` and `tf_static.py`, or `ImageCheck` with `image.py`.
 - Its `Private/Tests/` has automation tests for code that needs no ROS, one behavior per test.
 - `Scripts/setup.sh`, run as `pixi run setup`, builds Cyclone DDS and every message in its `PACKAGES` into `ThirdParty/`. That directory is generated and ignored; don't edit it.
 - `Scripts/idl.py` rewrites the IDL that ROS ships in the pixi environment (`share/<pkg>/msg/`) under the names ROS 2 uses on the wire, and writes `RosMessages.h`. Never hand-write message IDL.
@@ -49,6 +49,7 @@ One concept per file, named after the rclcpp or tf2_ros header it copies. Our ty
 - Every game instance publishes its own `/clock`, so several PIE clients on one domain give ROS several clocks. Game time starts from zero on each Play and level load, which ROS nodes see as time jumping back.
 - Unreal advances game time before any actor ticks, and physics moves bodies between `TG_PrePhysics` and `TG_PostPhysics`. A physics body read before physics is the previous frame's pose under this frame's stamp, so send it from `TG_PostPhysics` or later. `TfCheck` measures this as 3f.
 - Game time in a headless run goes about six times faster than the wall clock. Frames there beat 2000 fps, and Unreal counts each as at least `MinUndilatedFrameTime`, 0.5 ms in the engine's `BaseGame.ini`. `Checks/run.sh` fixes the frame rate at 60 with an `-ini` override, which makes every step 1/60 s and holds game time to the wall clock. Don't read timing from a headless run without it.
+- Large messages need big socket receive buffers where they're received. Cyclone asks for 1 MiB unless `SocketReceiveBufferSize` says otherwise, and macOS caps a socket at about 7 MiB until `kern.ipc.maxsockbuf` goes up, which it accepts only to 16 MiB, a sixteenth of the kernel's 256 MiB network buffer pool on Alvaro's Mac. On 2026-09-27, at 1 MiB even 640×480 best-effort images got lost, and at 14 MiB reliable 4K arrived at 30 per second. The README has the table.
 
 ## Verifying changes
 
@@ -79,7 +80,10 @@ sh Checks/run.sh ClockCheck clock.py
 sh Checks/run.sh ClockCheck clock.py default rmw_fastrtps_cpp
 sh Checks/run.sh TfCheck tf.py
 sh Checks/run.sh TfCheck tf_static.py
+IMAGE_SIZE=1920x1080 IMAGE_QOS=keep1 sh Checks/run.sh ImageCheck image.py
 ```
+
+`ImageCheck` and `image.py` both read `IMAGE_SIZE`, 640x480 by default, and `IMAGE_QOS`, one of `default`, `keep1` and `sensor`. Only 640×480 with the default QoS has to deliver every image; the rest report what arrived, and past 640×480 best effort needs the socket buffers the README describes.
 
 Repeat against the other distros with `-e humble`, `-e kilted` and `-e lyrical` after `pixi run`. Lyrical's `demo_nodes_cpp` uses `example_interfaces/msg/String` instead of `std_msgs/msg/String`, so its nodes don't reach Unreal. Test Lyrical with `pixi run -e lyrical ros2 topic echo /chatter std_msgs/msg/String` and `ros2 topic pub` instead. On 2026-09-27 the hello world and every check passed on all four distros and both RMWs.
 
