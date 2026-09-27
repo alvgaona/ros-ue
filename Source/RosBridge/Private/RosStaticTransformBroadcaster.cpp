@@ -3,7 +3,7 @@
 namespace ros
 {
 	StaticTransformBroadcaster::StaticTransformBroadcaster(const UObject* WorldContext)
-		: Tf(WorldContext, TEXT("/tf_static"), Qos::StaticBroadcaster)
+		: Tf(WorldContext, TEXT("/tf_static"), StaticBroadcasterQos())
 	{
 	}
 

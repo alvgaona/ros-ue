@@ -50,14 +50,14 @@ private:
 namespace ros
 {
 	template<class T>
-	Publisher<T> CreatePublisher(const UObject* WorldContext, const FString& Topic, Qos Profile = Qos::Reliable)
+	Publisher<T> CreatePublisher(const UObject* WorldContext, const FString& Topic, Qos Profile = 10)
 	{
 		URos* Ros = URos::Get(WorldContext);
 		return Ros ? Publisher<T>(Ros->CreatePublisher(Topic, TypeSupportOf<T>(), Profile)) : Publisher<T>();
 	}
 
 	template<class T>
-	Subscription CreateSubscription(const UObject* WorldContext, const FString& Topic, TFunction<void(const T&)> Callback, Qos Profile = Qos::Reliable)
+	Subscription CreateSubscription(const UObject* WorldContext, const FString& Topic, TFunction<void(const T&)> Callback, Qos Profile = 10)
 	{
 		URos* Ros = URos::Get(WorldContext);
 		return Ros ? Ros->CreateSubscription(Topic, TypeSupportOf<T>(), Profile,

@@ -39,6 +39,16 @@ The messages match the other distros on the wire, except `sensor_msgs/Range`, wh
 
 For a package that isn't listed, run `pixi add --feature jazzy ros-jazzy-<pkg>`, add it to `PACKAGES` in `Scripts/setup.sh` and run `pixi run setup` again.
 
+## QoS
+
+Publishers and subscriptions default to rclcpp's QoS: reliable, volatile, keep last 10. Pass a depth or a `ros::Qos` to change it, as with `rclcpp::QoS`:
+
+```cpp
+ros::Publisher<sensor_msgs::msg::Image> Camera = ros::CreatePublisher<sensor_msgs::msg::Image>(this, TEXT("/image_raw"), ros::SensorDataQos().KeepLast(1));
+```
+
+`ros::SensorDataQos`, `ros::DynamicBroadcasterQos` and `ros::StaticBroadcasterQos` copy the rclcpp and tf2_ros presets of the same names. A reliable subscription doesn't match a best-effort publisher, so match what the ROS side subscribes with.
+
 ## Time
 
 Unreal governs time. Each game instance publishes its game time on `/clock` every frame, so run ROS nodes with `--ros-args -p use_sim_time:=true`. ROS time then holds while the game is paused, follows time dilation, and starts again from zero on each Play. Stamp messages with the same time:

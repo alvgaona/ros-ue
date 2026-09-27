@@ -13,7 +13,7 @@ namespace ros
 	}
 
 	TransformBroadcaster::TransformBroadcaster(const UObject* InWorldContext)
-		: TransformBroadcaster(InWorldContext, TEXT("/tf"), Qos::DynamicBroadcaster)
+		: TransformBroadcaster(InWorldContext, TEXT("/tf"), DynamicBroadcasterQos())
 	{
 	}
 

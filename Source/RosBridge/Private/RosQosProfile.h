@@ -11,5 +11,5 @@ namespace ros
 {
 	struct QosDeleter { void operator()(dds_qos_t* Profile) const { dds_delete_qos(Profile); } };
 
-	TUniquePtr<dds_qos_t, QosDeleter> MakeQos(Qos Profile, const char* TypeHash);
+	TUniquePtr<dds_qos_t, QosDeleter> MakeQos(const Qos& Profile, const char* TypeHash);
 }
