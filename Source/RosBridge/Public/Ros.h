@@ -6,6 +6,7 @@
 #include "RosClock.h"
 #include "RosPublisher.h"
 #include "RosQos.h"
+#include "RosStaticTransformBroadcaster.h"
 #include "RosSubscription.h"
 #include "RosTransformBroadcaster.h"
 #include "RosTypeSupport.h"

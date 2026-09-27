@@ -7,7 +7,8 @@
 
 class UBoxComponent;
 
-// Sends frames on /tf for Checks/tf.py: three posed from game time, and a box moved by physics, read before and after.
+// Sends frames for Checks/tf.py and tf_static.py: three posed from game time, a box moved by physics, read before and
+// after, and two static children sent a second apart.
 UCLASS()
 class ATfCheck : public AActor
 {
@@ -28,5 +29,8 @@ private:
 	TObjectPtr<UBoxComponent> Body;
 
 	ros::TransformBroadcaster Broadcaster;
+	ros::StaticTransformBroadcaster Static;
 	FDelegateHandle BeforePhysics;
+	double Start = 0;
+	bool ArmSent = false;
 };

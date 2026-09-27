@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "RosMessages.h"
 #include "RosPublisher.h"
+#include "RosQos.h"
 
 namespace ros
 {
@@ -26,6 +27,9 @@ namespace ros
 		void SendTransform(const Frame& InFrame) const;
 
 	private:
+		friend class StaticTransformBroadcaster;
+		TransformBroadcaster(const UObject* WorldContext, const TCHAR* Topic, Qos Profile);
+
 		Publisher<tf2_msgs::msg::TFMessage> Tf;
 		TWeakObjectPtr<const UObject> WorldContext;
 	};

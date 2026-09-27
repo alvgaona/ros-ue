@@ -19,6 +19,11 @@ namespace ros
 			dds_qset_reliability(Result, DDS_RELIABILITY_RELIABLE, DDS_MSECS(100));
 			dds_qset_history(Result, DDS_HISTORY_KEEP_LAST, 100);
 			break;
+		case Qos::StaticBroadcaster: // tf2_ros StaticBroadcasterQoS: reliable, transient local, keep last 1
+			dds_qset_reliability(Result, DDS_RELIABILITY_RELIABLE, DDS_MSECS(100));
+			dds_qset_durability(Result, DDS_DURABILITY_TRANSIENT_LOCAL);
+			dds_qset_history(Result, DDS_HISTORY_KEEP_LAST, 1);
+			break;
 		}
 		// ROS 2 nodes read the type hash from USER_DATA and warn when it's missing
 		const FTCHARToUTF8 UserData(*FString::Printf(TEXT("typehash=%s;"), UTF8_TO_TCHAR(TypeHash)));

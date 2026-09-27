@@ -56,11 +56,24 @@ Each frame moves game time on by however long it took, so `/clock` steps vary wi
 A transform broadcaster works like tf2_ros's. It sends frames on `/tf`, converted to ROS and stamped with the time `/clock` carries, and all the frames of one call go out as one message:
 
 ```cpp
-Broadcaster = ros::TransformBroadcaster(this); // in BeginPlay, and `Broadcaster = {};` in EndPlay
+// In BeginPlay, and clear both with `= {}` in EndPlay
+Broadcaster = ros::TransformBroadcaster(this);
+Static = ros::StaticTransformBroadcaster(this);
+Static.SendTransform({ TEXT("base_link"), TEXT("lidar"), Lidar->GetRelativeTransform() });
+
+// Every tick
 Broadcaster.SendTransform({
 	{ TEXT("world"), TEXT("base_link"), GetActorTransform() },
-	{ TEXT("base_link"), TEXT("lidar"), Lidar->GetRelativeTransform() },
+	{ TEXT("base_link"), TEXT("arm"), Arm->GetRelativeTransform() },
 });
 ```
 
+Frames that never move, such as a sensor mount, go through the static broadcaster on `/tf_static`, which ROS nodes that start later still receive.
+
 Send the pose of anything physics moves from a tick in `TG_PostPhysics` or later. Before physics runs, a body still has the previous frame's pose while the stamp already has this frame's time, so its transform would arrive a frame late.
+
+ROS nodes can publish into the same tree, such as `map → odom` from localization. That works when:
+
+- Every frame has exactly one publisher.
+- ROS nodes that publish moving transforms run with `use_sim_time:=true`. Their wall-clock stamps can't be combined with Unreal's otherwise.
+- A transform about something Unreal simulates agrees with where Unreal has it, for example by building both from the same URDF.

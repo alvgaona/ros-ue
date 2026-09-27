@@ -13,7 +13,12 @@ namespace ros
 	}
 
 	TransformBroadcaster::TransformBroadcaster(const UObject* InWorldContext)
-		: Tf(CreatePublisher<tf2_msgs::msg::TFMessage>(InWorldContext, TEXT("/tf"), Qos::DynamicBroadcaster))
+		: TransformBroadcaster(InWorldContext, TEXT("/tf"), Qos::DynamicBroadcaster)
+	{
+	}
+
+	TransformBroadcaster::TransformBroadcaster(const UObject* InWorldContext, const TCHAR* Topic, Qos Profile)
+		: Tf(CreatePublisher<tf2_msgs::msg::TFMessage>(InWorldContext, Topic, Profile))
 		, WorldContext(InWorldContext)
 	{
 	}

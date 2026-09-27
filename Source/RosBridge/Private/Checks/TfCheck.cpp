@@ -16,6 +16,9 @@ void ATfCheck::BeginPlay()
 {
 	Super::BeginPlay();
 	Broadcaster = ros::TransformBroadcaster(this);
+	Static = ros::StaticTransformBroadcaster(this);
+	Static.SendTransform({ TEXT("slide"), TEXT("mount"), FTransform(FVector(0, 0, 50)) });
+	Start = GetWorld()->GetTimeSeconds();
 	Body->SetSimulatePhysics(true);
 	Body->SetEnableGravity(false);
 	Body->SetLinearDamping(0.f);
@@ -27,6 +30,7 @@ void ATfCheck::EndPlay(const EEndPlayReason::Type Reason)
 {
 	FWorldDelegates::OnWorldPreActorTick.Remove(BeforePhysics);
 	Broadcaster = {};
+	Static = {};
 	Super::EndPlay(Reason);
 }
 
@@ -47,4 +51,9 @@ void ATfCheck::Tick(float DeltaSeconds)
 		{ TEXT("world"), TEXT("turn"), FTransform(FQuat(FVector::UpVector, FMath::DegreesToRadians(90 * Time))) },
 		{ TEXT("world"), TEXT("body"), Body->GetComponentTransform() },
 	});
+	if (!ArmSent && Time - Start >= 1)
+	{
+		Static.SendTransform({ TEXT("turn"), TEXT("arm"), FTransform(FVector(100, 0, 0)) });
+		ArmSent = true;
+	}
 }

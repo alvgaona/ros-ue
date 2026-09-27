@@ -22,9 +22,10 @@ One concept per file, named after the rclcpp or tf2_ros header it copies. Our ty
 - `RosConversions.h` turns Unreal values into ROS messages: centimeters to meters with Y flipped, rotations mirrored to match, and game time to `builtin_interfaces::msg::Time`. Unreal's axes and units can't be configured (World to Meters only scales VR), and Epic's GeoReferencing plugin converts the same way.
 - `RosClock.h` has `ros::Clock`, which `URos` owns. Each frame it publishes the game instance's game time on `/clock` after the time advances and before any actor ticks, so no stamp is ahead of it. `ros::Now` returns that time for stamps. It is the plugin's only source of time, so a real-time or lockstep mode would change only this class.
 - `RosTransformBroadcaster.h` has `ros::TransformBroadcaster`, tf2_ros's broadcaster taking `ros::Frame`s: one `/tf` message per call, every frame stamped with `ros::Now`. It strips a leading slash from frame ids and refuses frames tf2 would drop.
+- `RosStaticTransformBroadcaster.h` has `ros::StaticTransformBroadcaster`, on `/tf_static` with `Qos::StaticBroadcaster`, which is transient local. Like tf2_ros's, it keeps every frame it was given and resends them all on each call, since a late subscriber only gets the last message.
 - `RosTypeSupport.h` has `ROS_MESSAGE`, which gives a generated message struct its DDS descriptor and ROS 2 type hash. It is the only header without a `.cpp`.
 - `RosMessages.h` is generated into `ThirdParty/msgs/`. It gives every generated message its ROS 2 C++ name (`std_msgs::msg::String`) and registers it with `ROS_MESSAGE`, so there's nothing to register by hand.
-- `Private/Checks/HelloRos` is `demo_nodes_cpp`'s talker and listener in one actor, and the end-to-end check. Actors that only exist for checks go in `Private/Checks/`, and the Python that judges them goes in `Checks/` at the root, as with `ClockCheck` and `clock.py`, or `TfCheck` and `tf.py`.
+- `Private/Checks/HelloRos` is `demo_nodes_cpp`'s talker and listener in one actor, and the end-to-end check. Actors that only exist for checks go in `Private/Checks/`, and the Python that judges them goes in `Checks/` at the root, as with `ClockCheck` and `clock.py`, or `TfCheck` with `tf.py` and `tf_static.py`.
 - `Private/Tests/` has automation tests for code that needs no ROS, one behavior per test.
 - `Scripts/setup.sh`, run as `pixi run setup`, builds Cyclone DDS and every message in its `PACKAGES` into `ThirdParty/`. That directory is generated and ignored; don't edit it.
 - `Scripts/idl.py` rewrites the IDL that ROS ships in the pixi environment (`share/<pkg>/msg/`) under the names ROS 2 uses on the wire, and writes `RosMessages.h`. Never hand-write message IDL.
@@ -76,6 +77,7 @@ Checks with a Python side run through `Checks/run.sh`. It starts the checker, th
 sh Checks/run.sh ClockCheck clock.py
 sh Checks/run.sh ClockCheck clock.py default rmw_fastrtps_cpp
 sh Checks/run.sh TfCheck tf.py
+sh Checks/run.sh TfCheck tf_static.py
 ```
 
 Repeat against the other distros with `-e humble`, `-e kilted` and `-e lyrical` after `pixi run`. Lyrical's `demo_nodes_cpp` uses `example_interfaces/msg/String` instead of `std_msgs/msg/String`; its nodes still reach Unreal on Cyclone but not on Fast DDS. Test Lyrical with `pixi run -e lyrical ros2 topic echo /chatter std_msgs/msg/String` and `ros2 topic pub` instead. On 2026-09-26 all four distros passed both ways on both RMWs.
