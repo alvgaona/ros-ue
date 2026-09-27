@@ -41,8 +41,9 @@ One concept per file, named after the rclcpp or tf2_ros header it copies. Our ty
 - Messages come from Jazzy and are the same on the wire in Humble through Lyrical, except `sensor_msgs/Range`, which gained `variance` after Humble. Lyrical dropped `geometry_msgs/Pose2D`.
 - When one shell's ROS tools see nothing while others do, suspect that shell, not Unreal. On 2026-09-26 a fresh shell fixed exactly that. A healthy participant answers a new participant's multicast hello within milliseconds. `tcpdump` shows the multicast on `en0` and the replies on `lo0`, and needs no sudo on Alvaro's Mac.
 - UE 5.8's build accelerator (UBA) loses the object files when the plugin folder is a symlink, and the link fails with `no such file or directory`. The host project turns it off with `bAllowUBAExecutor` set to false in its own `Saved/UnrealBuildTool/BuildConfiguration.xml`. `AdditionalPluginDirectories` is no way around it, since it only finds plugins one folder down and this repo is the plugin folder.
+- Building while any editor runs, even one still at the Project Browser, links a hot-reload binary such as `libUnrealEditor-RosBridge-0001.dylib` that the module list doesn't name, so the project opens with the old plugin. Pass `-NoHotReload`, as below. If the editor has the host project open, build the `/private/tmp` copy instead.
 - Every game instance publishes its own `/clock`, so several PIE clients on one domain give ROS several clocks. Game time starts from zero on each Play and level load, which ROS nodes see as time jumping back.
-- Game time in a headless run goes about six times faster than the wall clock. Frames there beat 2000 fps, and Unreal counts each as at least `MinUndilatedFrameTime`, 0.5 ms in the engine's `BaseGame.ini`. `Checks/clock.py` prints the ratio. Don't read timing from that mode.
+- Game time in a headless run goes about six times faster than the wall clock. Frames there beat 2000 fps, and Unreal counts each as at least `MinUndilatedFrameTime`, 0.5 ms in the engine's `BaseGame.ini`. `Checks/clock.py` prints the ratio. Don't read timing from that mode. A fixed frame rate holds it to the wall clock, with `"-ini:Engine:[/Script/Engine.Engine]:bUseFixedFrameRate=True,[/Script/Engine.Engine]:FixedFrameRate=60"` on the command line.
 
 ## Verifying changes
 
@@ -51,7 +52,7 @@ The host project on Alvaro's machine is `~/Documents/Unreal Projects/RosBridgeHo
 ```sh
 UE="/Users/Shared/Epic Games/UE_5.8/Engine"
 HOST="$HOME/Documents/Unreal Projects/RosBridgeHost/RosBridgeHost.uproject"
-"$UE/Build/BatchFiles/Mac/Build.sh" RosBridgeHostEditor Mac Development -Project="$HOST"
+"$UE/Build/BatchFiles/Mac/Build.sh" RosBridgeHostEditor Mac Development -Project="$HOST" -NoHotReload
 "$UE/Binaries/Mac/UnrealEditor.app/Contents/MacOS/UnrealEditor" "$HOST" -ExecCmds="Automation RunTests RosBridge" -testexit="Automation Test Queue Empty" -unattended -nullrhi -nosplash -stdout
 "$UE/Binaries/Mac/UnrealEditor.app/Contents/MacOS/UnrealEditor" "$HOST" /Engine/Maps/Entry -game -nullrhi -unattended -stdout -ExecCmds="summon /Script/RosBridge.HelloRos"
 ```

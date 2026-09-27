@@ -46,3 +46,7 @@ Unreal governs time. Each game instance publishes its game time on `/clock` ever
 ```cpp
 Message.header.stamp = ros::Now(this);
 ```
+
+In the editor, turn off Editor Preferences → General → Performance → Use Less CPU when in Background. It is on by default and holds the editor to 3 frames per second whenever another app, such as a terminal or RViz, is in front, so the simulation and `/clock` step only three times a second.
+
+Each frame moves game time on by however long it took, so `/clock` steps vary with the frame rate. For a fixed step, turn on Project Settings → Engine → General Settings → Framerate → Use Fixed Frame Rate. Every frame then moves game time on by exactly 1/rate, and a frame that runs long leaves game time behind the wall clock instead of taking a bigger step.
