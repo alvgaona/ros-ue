@@ -14,8 +14,11 @@ from std_msgs.msg import Float64
 
 width, height = (int(n) for n in os.environ.get("IMAGE_SIZE", "640x480").split("x"))
 qos_name = os.environ.get("IMAGE_QOS", "default")
-qos = {"default": QoSProfile(depth=10), "keep1": QoSProfile(depth=1),
-       "sensor": QoSProfile(depth=5, reliability=ReliabilityPolicy.BEST_EFFORT)}[qos_name]
+qos = {
+    "default": QoSProfile(depth=10),
+    "keep1": QoSProfile(depth=1),
+    "sensor": QoSProfile(depth=5, reliability=ReliabilityPolicy.BEST_EFFORT),
+}[qos_name]
 
 # The pattern ImageCheck sends: blue and green carry x and y, red their high bits
 x, y = np.arange(width)[None, :], np.arange(height)[:, None]
@@ -39,8 +42,13 @@ def ns(stamp):
 
 
 def on_image(msg):
-    exact = (msg.width, msg.height, msg.encoding, msg.step, msg.is_bigendian) == (width, height, "bgra8", width * 4, 0) \
-        and np.array_equal(np.frombuffer(msg.data, np.uint8), pattern)
+    exact = (msg.width, msg.height, msg.encoding, msg.step, msg.is_bigendian) == (
+        width,
+        height,
+        "bgra8",
+        width * 4,
+        0,
+    ) and np.array_equal(np.frombuffer(msg.data, np.uint8), pattern)
     images.append((ns(msg.header.stamp), time.monotonic(), exact))
 
 
@@ -63,12 +71,20 @@ def verdict(name, ok, detail):
 
 run = f"{width}x{height}, {qos_name} QoS"
 wrong = [s for s, _, exact in images if not exact]
-ok = [verdict(f"1a every image arrives exact ({run})", bool(images) and not wrong, f"{len(images)} images, {len(wrong)} wrong")]
+ok = [
+    verdict(
+        f"1a every image arrives exact ({run})", bool(images) and not wrong, f"{len(images)} images, {len(wrong)} wrong"
+    )
+]
 
 # Stamps outside the /clock samples we heard can't be compared
 known = set(clock)
 checked = [s for s, _, _ in images if min(clock, default=0) <= s <= max(clock, default=0)]
-ok.append(verdict("1b every stamp is a /clock value", bool(checked) and all(s in known for s in checked), f"{len(checked)} stamps"))
+ok.append(
+    verdict(
+        "1b every stamp is a /clock value", bool(checked) and all(s in known for s in checked), f"{len(checked)} stamps"
+    )
+)
 
 # ImageCheck sends one every 1/30 s of sim time, so the first and last stamps say how many went out meanwhile
 stamps = sorted({s for s, _, _ in images})
@@ -86,7 +102,10 @@ else:
 
 if writes:
     ms = np.array(writes) * 1000
-    print(f"INFO 1d each write held the game thread: median {np.median(ms):.2f} ms, 95th percentile {np.percentile(ms, 95):.2f} ms, "
-          f"max {ms.max():.2f} ms over {len(ms)} writes", flush=True)
+    print(
+        f"INFO 1d each write held the game thread: median {np.median(ms):.2f} ms, 95th percentile {np.percentile(ms, 95):.2f} ms, "
+        f"max {ms.max():.2f} ms over {len(ms)} writes",
+        flush=True,
+    )
 
 sys.exit(0 if all(ok) else 1)

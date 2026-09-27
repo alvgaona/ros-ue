@@ -17,8 +17,7 @@ void URos::Initialize(FSubsystemCollectionBase&)
 	// 0 when unset, same as ROS
 	const int32 Domain = FCString::Atoi(*FPlatformMisc::GetEnvironmentVariable(TEXT("ROS_DOMAIN_ID")));
 	Participant = dds_create_participant(Domain, nullptr, nullptr);
-	Clock = MakeShared<ros::Clock>(*GetGameInstance(), ros::Publisher<rosgraph_msgs::msg::Clock>(
-		CreatePublisher(TEXT("/clock"), ros::TypeSupportOf<rosgraph_msgs::msg::Clock>(), 10)));
+	Clock = MakeShared<ros::Clock>(*GetGameInstance(), ros::Publisher<rosgraph_msgs::msg::Clock>(CreatePublisher(TEXT("/clock"), ros::TypeSupportOf<rosgraph_msgs::msg::Clock>(), 10)));
 }
 
 void URos::Deinitialize()

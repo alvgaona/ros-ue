@@ -6,7 +6,8 @@
 namespace ros
 {
 	Clock::Clock(const UGameInstance& InGameInstance, Publisher<rosgraph_msgs::msg::Clock> InPublisher)
-		: GameInstance(InGameInstance), ClockPublisher(MoveTemp(InPublisher))
+		: GameInstance(InGameInstance)
+		, ClockPublisher(MoveTemp(InPublisher))
 	{
 		// Fires once the frame's game time has advanced and before any actor ticks, and not while paused
 		TickHandle = FWorldDelegates::OnWorldPreActorTick.AddRaw(this, &Clock::Tick);

@@ -17,7 +17,8 @@ void AImageCheck::BeginPlay()
 	}
 	const FString Qos = FPlatformMisc::GetEnvironmentVariable(TEXT("IMAGE_QOS"));
 	Images = ros::CreatePublisher<sensor_msgs::msg::Image>(this, TEXT("/image_raw"),
-		Qos == TEXT("keep1") ? ros::Qos(1) : Qos == TEXT("sensor") ? ros::SensorDataQos() : ros::Qos(10));
+		Qos == TEXT("keep1") ? ros::Qos(1) : Qos == TEXT("sensor") ? ros::SensorDataQos()
+																   : ros::Qos(10));
 	WriteSeconds = ros::CreatePublisher<std_msgs::msg::Float64>(this, TEXT("/image_check/write_seconds"), 1000);
 
 	// Blue and green carry x and y, red their high bits, so every byte depends on where it is

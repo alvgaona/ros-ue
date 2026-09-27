@@ -15,8 +15,13 @@ namespace ros
 		const char* Hash;
 	};
 
-	template<class T> TypeSupport TypeSupportOf();
+	template<class T>
+	TypeSupport TypeSupportOf();
 }
 
-#define ROS_MESSAGE(T) \
-	namespace ros { template<> inline TypeSupport TypeSupportOf<T>() { return { &T##_desc, T##_typehash }; } }
+#define ROS_MESSAGE(T)                                                                \
+	namespace ros                                                                     \
+	{                                                                                 \
+		template<>                                                                    \
+		inline TypeSupport TypeSupportOf<T>() { return { &T##_desc, T##_typehash }; } \
+	}

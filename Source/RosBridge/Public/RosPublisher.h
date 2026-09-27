@@ -33,7 +33,9 @@ namespace ros
 	{
 	public:
 		Publisher() = default;
-		explicit Publisher(PublisherBase&& Base) : PublisherBase(MoveTemp(Base)) {}
+		explicit Publisher(PublisherBase&& Base)
+			: PublisherBase(MoveTemp(Base))
+		{}
 		void Publish(const T& Msg) const { Write(&Msg); }
 	};
 }

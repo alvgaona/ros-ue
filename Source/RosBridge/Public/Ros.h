@@ -61,7 +61,8 @@ namespace ros
 	{
 		URos* Ros = URos::Get(WorldContext);
 		return Ros ? Ros->CreateSubscription(Topic, TypeSupportOf<T>(), Profile,
-			[Callback = MoveTemp(Callback)](const void* Sample) { Callback(*static_cast<const T*>(Sample)); }) : Subscription();
+						 [Callback = MoveTemp(Callback)](const void* Sample) { Callback(*static_cast<const T*>(Sample)); })
+				   : Subscription();
 	}
 
 	// The sim time of WorldContext's game instance, for message stamps.

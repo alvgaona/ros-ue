@@ -37,8 +37,13 @@ namespace ros
 	{
 	public:
 		CameraStream(const URosCameraComponent& Camera, Publisher<sensor_msgs::msg::Image> InImages, Publisher<sensor_msgs::msg::CompressedImage> InJpegs)
-			: Images(MoveTemp(InImages)), Jpegs(MoveTemp(InJpegs)), FrameId(Camera.FrameId), Width(Camera.Width), Height(Camera.Height)
-			, JpegQuality(Camera.JpegQuality), ImageWrappers(FModuleManager::LoadModuleChecked<IImageWrapperModule>(TEXT("ImageWrapper")))
+			: Images(MoveTemp(InImages))
+			, Jpegs(MoveTemp(InJpegs))
+			, FrameId(Camera.FrameId)
+			, Width(Camera.Width)
+			, Height(Camera.Height)
+			, JpegQuality(Camera.JpegQuality)
+			, ImageWrappers(FModuleManager::LoadModuleChecked<IImageWrapperModule>(TEXT("ImageWrapper")))
 		{
 		}
 
@@ -182,8 +187,7 @@ void URosCameraComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 		Target = TextureTarget->GameThread_GetRenderTargetResource();
 	}
 	// Every frame, so an image goes out as soon as the GPU has it
-	ENQUEUE_RENDER_COMMAND(RosCamera)([Stream = Stream, Target, Stamp = ros::Now(this)](FRHICommandListImmediate& RHICmdList)
-	{
+	ENQUEUE_RENDER_COMMAND(RosCamera)([Stream = Stream, Target, Stamp = ros::Now(this)](FRHICommandListImmediate& RHICmdList) {
 		if (Target)
 			Stream->Read(RHICmdList, Target->GetRenderTargetTexture(), Stamp);
 		Stream->Publish();

@@ -3,7 +3,8 @@
 namespace ros
 {
 	Reader::Reader(dds_entity_t InEntity, TFunction<void(const void*)> InCallback)
-		: Entity(InEntity), Callback(MoveTemp(InCallback))
+		: Entity(InEntity)
+		, Callback(MoveTemp(InCallback))
 	{
 		ensureMsgf(Entity > 0, TEXT("DDS reader create failed: %s"), UTF8_TO_TCHAR(dds_strretcode(Entity)));
 	}

@@ -3,6 +3,7 @@
 import statistics
 import sys
 import time
+from itertools import pairwise
 
 import rclpy
 from rclpy.node import Node
@@ -39,25 +40,51 @@ def verdict(name, ok, detail):
 def steps(start, stop):
     # Sim time between consecutive frames, skipping half a second after each phase change
     window = [sim for wall, sim in samples if start + 0.5 < wall < stop]
-    return [(b - a) / 1e9 for a, b in zip(window, window[1:])]
+    return [(b - a) / 1e9 for a, b in pairwise(window)]
 
 
 sims = [sim for _, sim in samples]
-ok = [verdict("2a /clock arrives and never goes backwards", len(sims) > 20 and all(b >= a for a, b in zip(sims, sims[1:])), f"{len(sims)} samples")]
+ok = [
+    verdict(
+        "2a /clock arrives and never goes backwards",
+        len(sims) > 20 and all(b >= a for a, b in pairwise(sims)),
+        f"{len(sims)} samples",
+    )
+]
 known = set(sims)
 # The node's own /clock subscription runs ahead of ours, so readings past our newest sample can't be compared yet
 reads = [r for r in readings if 0 < r <= max(sims, default=0)]
-ok.append(verdict("2b a use_sim_time node takes its time from /clock", bool(reads) and all(r in known for r in reads), f"{len(reads)} readings"))
+ok.append(
+    verdict(
+        "2b a use_sim_time node takes its time from /clock",
+        bool(reads) and all(r in known for r in reads),
+        f"{len(reads)} readings",
+    )
+)
 
 if all(p in phases for p in ("run", "pause", "resume", "slomo", "done")):
     held = max(sim for wall, sim in samples if wall < phases["pause"] + 0.5)
     paused = [sim for wall, sim in samples if phases["pause"] + 0.5 < wall < phases["resume"] - 0.5]
     advanced = [sim for sim in sims if sim > held]
     jump = (advanced[0] - held) / 1e9 if advanced else float("inf")
-    ok.append(verdict("2c /clock holds while paused and resumes without a jump", all(s == held for s in paused) and jump < 0.2,
-                      f"{len(paused)} samples while paused, first step after {jump:.3f} s"))
-    run, slomo = statistics.median(steps(phases["run"], phases["pause"])), statistics.median(steps(phases["slomo"], phases["done"]))
-    ok.append(verdict("2c slomo 0.5 halves how far sim time moves per frame", 0.4 < slomo / run < 0.6, f"{slomo / run:.2f} of the normal step"))
+    ok.append(
+        verdict(
+            "2c /clock holds while paused and resumes without a jump",
+            all(s == held for s in paused) and jump < 0.2,
+            f"{len(paused)} samples while paused, first step after {jump:.3f} s",
+        )
+    )
+    run, slomo = (
+        statistics.median(steps(phases["run"], phases["pause"])),
+        statistics.median(steps(phases["slomo"], phases["done"])),
+    )
+    ok.append(
+        verdict(
+            "2c slomo 0.5 halves how far sim time moves per frame",
+            0.4 < slomo / run < 0.6,
+            f"{slomo / run:.2f} of the normal step",
+        )
+    )
     running = [(wall, sim) for wall, sim in samples if phases["run"] + 0.5 < wall < phases["pause"]]
     factor = (running[-1][1] - running[0][1]) / 1e9 / (running[-1][0] - running[0][0])
     print(f"INFO 2d real-time factor: {factor:.2f} sim seconds per wall second", flush=True)

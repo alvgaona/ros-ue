@@ -32,8 +32,7 @@ namespace ros
 	{
 		const builtin_interfaces::msg::Time Stamp = Now(WorldContext.Get());
 		TArray<TArray<ANSICHAR>> Ids; // the message points into these until it's written
-		const auto Utf8 = [&Ids](const FString& Id)
-		{
+		const auto Utf8 = [&Ids](const FString& Id) {
 			const FTCHARToUTF8 Converted(*Id);
 			return Ids.Emplace_GetRef(reinterpret_cast<const ANSICHAR*>(Converted.Get()), Converted.Length() + 1).GetData();
 		};

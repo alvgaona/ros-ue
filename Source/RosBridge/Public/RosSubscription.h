@@ -29,7 +29,9 @@ namespace ros
 	{
 	public:
 		Subscription() = default;
-		explicit Subscription(TSharedRef<Reader> InReader) : Impl(MoveTemp(InReader)) {}
+		explicit Subscription(TSharedRef<Reader> InReader)
+			: Impl(MoveTemp(InReader))
+		{}
 		Subscription(Subscription&&) = default;
 		Subscription& operator=(Subscription&&) = default;
 

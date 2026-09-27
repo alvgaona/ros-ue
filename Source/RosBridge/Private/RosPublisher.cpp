@@ -3,12 +3,14 @@
 
 namespace ros
 {
-	PublisherBase::PublisherBase(dds_entity_t InWriter) : Writer(InWriter)
+	PublisherBase::PublisherBase(dds_entity_t InWriter)
+		: Writer(InWriter)
 	{
 		ensureMsgf(Writer > 0, TEXT("DDS writer create failed: %s"), UTF8_TO_TCHAR(dds_strretcode(Writer)));
 	}
 
-	PublisherBase::PublisherBase(PublisherBase&& Other) : Writer(Other.Writer)
+	PublisherBase::PublisherBase(PublisherBase&& Other)
+		: Writer(Other.Writer)
 	{
 		Other.Writer = 0;
 	}

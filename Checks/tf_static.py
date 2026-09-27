@@ -71,7 +71,13 @@ while time.monotonic() < deadline and not (first and clock and clock[-1] - first
 late = []  # /tf_static messages the late subscription got
 incompatible = []
 static_qos = QoSProfile(depth=100, reliability=ReliabilityPolicy.RELIABLE, durability=DurabilityPolicy.TRANSIENT_LOCAL)
-sim.create_subscription(TFMessage, "/tf_static", late.append, static_qos, event_callbacks=SubscriptionEventCallbacks(incompatible_qos=incompatible.append))
+sim.create_subscription(
+    TFMessage,
+    "/tf_static",
+    late.append,
+    static_qos,
+    event_callbacks=SubscriptionEventCallbacks(incompatible_qos=incompatible.append),
+)
 buffer = Buffer()
 listener = TransformListener(buffer, sim)
 end = time.monotonic() + 3
@@ -91,8 +97,14 @@ def yaw_error(q, yaw):
 
 unreal = [m for m in late if any(t.child_frame_id in ("mount", "arm") for t in m.transforms)]
 children = [sorted(t.child_frame_id for t in m.transforms) for m in unreal]
-ok = [verdict("4a a subscriber that joins late still gets Unreal's static frames", bool(unreal), f"{len(unreal)} messages")]
-ok.append(verdict("4b what it gets holds both frames, sent a second apart", ["arm", "mount"] in children, f"got {children}"))
+ok = [
+    verdict(
+        "4a a subscriber that joins late still gets Unreal's static frames", bool(unreal), f"{len(unreal)} messages"
+    )
+]
+ok.append(
+    verdict("4b what it gets holds both frames, sent a second apart", ["arm", "mount"] in children, f"got {children}")
+)
 ok.append(verdict("4c /tf_static has no incompatible QoS", not incompatible, f"{len(incompatible)} events"))
 
 name = "4d world, a moving frame and its static child resolve as one chain"
@@ -101,8 +113,15 @@ try:
     arm = buffer.lookup_transform("world", "arm", Time())
     tm, ta = ns(mount.header.stamp) / 1e9, ns(arm.header.stamp) / 1e9
     m, a = mount.transform.translation, arm.transform.translation
-    error = max(abs(m.x), abs(m.y + tm), abs(m.z - 0.5), abs(a.x - math.cos(math.pi / 2 * ta)), abs(a.y + math.sin(math.pi / 2 * ta)), abs(a.z),
-                yaw_error(arm.transform.rotation, -math.pi / 2 * ta))
+    error = max(
+        abs(m.x),
+        abs(m.y + tm),
+        abs(m.z - 0.5),
+        abs(a.x - math.cos(math.pi / 2 * ta)),
+        abs(a.y + math.sin(math.pi / 2 * ta)),
+        abs(a.z),
+        yaw_error(arm.transform.rotation, -math.pi / 2 * ta),
+    )
     ok.append(verdict(name, error < 1e-6, f"mount and arm off by {error:.1e}"))
 except TransformException as e:
     ok.append(verdict(name, False, e))
@@ -112,13 +131,21 @@ try:
     on_sim = buffer.lookup_transform("world", "ros_sim", Time())
     static = buffer.lookup_transform("world", "ros_static", Time())
     s, st = on_sim.transform.translation, static.transform.translation
-    error = max(abs(s.x - 1), abs(s.y + ns(on_sim.header.stamp) / 1e9), abs(st.x), abs(st.y - 1 + ns(static.header.stamp) / 1e9))
+    error = max(
+        abs(s.x - 1), abs(s.y + ns(on_sim.header.stamp) / 1e9), abs(st.x), abs(st.y - 1 + ns(static.header.stamp) / 1e9)
+    )
     try:
         buffer.lookup_transform("world", "ros_wall", Time())
         wall_result = "resolves"
     except TransformException as e:
         wall_result = type(e).__name__
-    ok.append(verdict(name, error < 1e-6 and wall_result == "ExtrapolationException", f"sim and static off by {error:.1e}, wall time gives {wall_result}"))
+    ok.append(
+        verdict(
+            name,
+            error < 1e-6 and wall_result == "ExtrapolationException",
+            f"sim and static off by {error:.1e}, wall time gives {wall_result}",
+        )
+    )
 except TransformException as e:
     ok.append(verdict(name, False, e))
 

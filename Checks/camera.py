@@ -8,9 +8,9 @@ import time
 
 import numpy as np
 import rclpy
+from PIL import Image as Pil
 from rclpy.node import Node
 from rclpy.qos import QoSProfile, ReliabilityPolicy
-from PIL import Image as Pil
 from rosgraph_msgs.msg import Clock
 from sensor_msgs.msg import CompressedImage, Image
 
@@ -46,8 +46,15 @@ def center(mask):
 
 
 def on_image(msg):
-    layout = (msg.header.frame_id, msg.width, msg.height, msg.encoding, msg.step, msg.is_bigendian, len(msg.data)) == \
-        ("camera_optical_frame", width, height, "bgr8", width * 3, 0, width * height * 3)
+    layout = (msg.header.frame_id, msg.width, msg.height, msg.encoding, msg.step, msg.is_bigendian, len(msg.data)) == (
+        "camera_optical_frame",
+        width,
+        height,
+        "bgr8",
+        width * 3,
+        0,
+        width * height * 3,
+    )
     red = green = None
     if layout:
         b, g, r = np.frombuffer(msg.data, np.uint8).reshape(height, width, 3).astype(int).transpose(2, 0, 1)
@@ -94,41 +101,74 @@ def delivered(stamps):
 if os.environ.get("CAMERA_RAW") == "off":
     ok, detail = delivered(s for s, *_ in jpegs)
     publishers = node.count_publishers("/camera/image_raw")
-    sys.exit(0 if verdict("2g with Raw off, no raw topic, and every JPEG still comes", ok and not images and publishers == 0,
-                          f"{detail} JPEGs, {len(images)} raw images, {publishers} raw publishers") else 1)
+    sys.exit(
+        0
+        if verdict(
+            "2g with Raw off, no raw topic, and every JPEG still comes",
+            ok and not images and publishers == 0,
+            f"{detail} JPEGs, {len(images)} raw images, {publishers} raw publishers",
+        )
+        else 1
+    )
 
 laid_out = [image for image in images if image[1]]
-ok = [verdict("2a every image is 640x480 bgr8 in camera_optical_frame", bool(images) and len(laid_out) == len(images),
-              f"{len(images)} images, {len(images) - len(laid_out)} wrong")]
+ok = [
+    verdict(
+        "2a every image is 640x480 bgr8 in camera_optical_frame",
+        bool(images) and len(laid_out) == len(images),
+        f"{len(images)} images, {len(images) - len(laid_out)} wrong",
+    )
+]
 
 # Stamps outside the /clock samples we heard can't be compared
 known = set(clock)
 checked = [s for s, *_ in images if min(clock, default=0) <= s <= max(clock, default=0)]
-ok.append(verdict("2b every stamp is a /clock value", bool(checked) and all(s in known for s in checked), f"{len(checked)} stamps"))
+ok.append(
+    verdict(
+        "2b every stamp is a /clock value", bool(checked) and all(s in known for s in checked), f"{len(checked)} stamps"
+    )
+)
 
 ok.append(verdict("2c every image is delivered, 30 per second of sim time", *delivered(s for s, *_ in images)))
 
 # The cubes are gray until their material's shaders have loaded, and the first image in color can show the green cube a
 # frame behind as Unreal rebuilds it, so judge the images after the first that shows both
-first = next((i for i, (_, _, red, green) in enumerate(laid_out) if red is not None and green is not None), len(laid_out)) + 1
+first = (
+    next((i for i, (_, _, red, green) in enumerate(laid_out) if red is not None and green is not None), len(laid_out))
+    + 1
+)
 shown = laid_out[first:]
 warmup = f", after {first} while shaders loaded"
 
 # Flipped, mirrored or with red and blue swapped, the red cube isn't where it should be
 still = project(-300, 200)
 off = [np.linalg.norm(red - still) if red is not None else np.inf for _, _, red, _ in shown]
-ok.append(verdict("2d the image is upright and red is red", bool(off) and max(off) < 2,
-                  f"red cube at most {max(off, default=np.inf):.1f} px from ({still[0]:.1f}, {still[1]:.1f}) in {len(off)} images{warmup}"))
+ok.append(
+    verdict(
+        "2d the image is upright and red is red",
+        bool(off) and max(off) < 2,
+        f"red cube at most {max(off, default=np.inf):.1f} px from ({still[0]:.1f}, {still[1]:.1f}) in {len(off)} images{warmup}",
+    )
+)
 
 # The green cube moves up to 10 px a frame, so an image of an earlier frame would put it well off
 off = [np.linalg.norm(green - swinging(s / 1e9)) if green is not None else np.inf for s, _, _, green in shown]
-ok.append(verdict("2e each image shows the scene at its stamp", bool(off) and max(off) < 2,
-                  f"green cube at most {max(off, default=np.inf):.1f} px from where its stamp puts it in {len(off)} images"))
+ok.append(
+    verdict(
+        "2e each image shows the scene at its stamp",
+        bool(off) and max(off) < 2,
+        f"green cube at most {max(off, default=np.inf):.1f} px from where its stamp puts it in {len(off)} images",
+    )
+)
 
 # JPEG's error on flat cubes against black stays well under a level in 255
 matched = [off for _, _, off in jpegs if off is not None]
-ok.append(verdict("2f every JPEG on /compressed is labeled for image_transport and decodes to the raw image with its stamp",
-                  bool(matched) and all(labeled for _, labeled, _ in jpegs) and max(matched) < 1,
-                  f"{len(jpegs)} JPEGs, {len(matched)} matched to a raw image, off by {max(matched, default=np.inf):.2f} on average at most"))
+ok.append(
+    verdict(
+        "2f every JPEG on /compressed is labeled for image_transport and decodes to the raw image with its stamp",
+        bool(matched) and all(labeled for _, labeled, _ in jpegs) and max(matched) < 1,
+        f"{len(jpegs)} JPEGs, {len(matched)} matched to a raw image, off by {max(matched, default=np.inf):.2f} on average at most",
+    )
+)
 
 sys.exit(0 if all(ok) else 1)

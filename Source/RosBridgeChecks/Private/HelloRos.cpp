@@ -5,8 +5,7 @@ void AHelloRos::BeginPlay()
 {
 	Super::BeginPlay();
 	Publisher = ros::CreatePublisher<std_msgs::msg::String>(this, TEXT("/chatter"));
-	Subscription = ros::CreateSubscription<std_msgs::msg::String>(this, TEXT("/chatter"), [](const std_msgs::msg::String& Msg)
-	{
+	Subscription = ros::CreateSubscription<std_msgs::msg::String>(this, TEXT("/chatter"), [](const std_msgs::msg::String& Msg) {
 		UE_LOG(LogRos, Log, TEXT("I heard: [%s]"), UTF8_TO_TCHAR(Msg.data));
 	});
 	GetWorldTimerManager().SetTimer(Timer, this, &AHelloRos::Talk, 1.0f, true);
