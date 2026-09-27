@@ -38,3 +38,11 @@ ros::Publisher<geometry_msgs::msg::Twist> Publisher = ros::CreatePublisher<geome
 The messages match the other distros on the wire, except `sensor_msgs/Range`, which has no `variance` field in Humble.
 
 For a package that isn't listed, run `pixi add --feature jazzy ros-jazzy-<pkg>`, add it to `PACKAGES` in `Scripts/setup.sh` and run `pixi run setup` again.
+
+## Time
+
+Unreal governs time. Each game instance publishes its game time on `/clock` every frame, so run ROS nodes with `--ros-args -p use_sim_time:=true`. ROS time then holds while the game is paused, follows time dilation, and starts again from zero on each Play. Stamp messages with the same time:
+
+```cpp
+Message.header.stamp = ros::Now(this);
+```

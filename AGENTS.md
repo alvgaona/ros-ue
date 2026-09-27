@@ -20,9 +20,10 @@ One concept per file, named after the rclcpp or tf2_ros header it copies. Our ty
 - `RosPublisher.h` has `ros::Publisher<T>`, a handle that only adds a typed `Publish` to `ros::PublisherBase`, which owns a DDS writer. `RosSubscription.h` has `ros::Subscription`, a handle to a `ros::Reader`, which owns a DDS reader and runs the take loop. Neither side is a template underneath, since `ros::CreateSubscription<T>` wraps the typed callback.
 - `RosQos.h` has `ros::Qos`. `Private/RosQos.cpp` builds each profile when an endpoint is created, with the type hash in USER_DATA.
 - `RosConversions.h` turns Unreal values into ROS messages: centimeters to meters with Y flipped, rotations mirrored to match, and game time to `builtin_interfaces::msg::Time`. Unreal's axes and units can't be configured (World to Meters only scales VR), and Epic's GeoReferencing plugin converts the same way.
+- `RosClock.h` has `ros::Clock`, which `URos` owns. Each frame it publishes the game instance's game time on `/clock` after the time advances and before any actor ticks, so no stamp is ahead of it. `ros::Now` returns that time for stamps. It is the plugin's only source of time, so a real-time or lockstep mode would change only this class.
 - `RosTypeSupport.h` has `ROS_MESSAGE`, which gives a generated message struct its DDS descriptor and ROS 2 type hash. It is the only header without a `.cpp`.
 - `RosMessages.h` is generated into `ThirdParty/msgs/`. It gives every generated message its ROS 2 C++ name (`std_msgs::msg::String`) and registers it with `ROS_MESSAGE`, so there's nothing to register by hand.
-- `Private/Checks/HelloRos` is `demo_nodes_cpp`'s talker and listener in one actor, and the end-to-end check. Actors that only exist for checks go in `Private/Checks/`.
+- `Private/Checks/HelloRos` is `demo_nodes_cpp`'s talker and listener in one actor, and the end-to-end check. Actors that only exist for checks go in `Private/Checks/`, and the Python that judges them goes in `Checks/` at the root, as with `ClockCheck` and `clock.py`.
 - `Private/Tests/` has automation tests for code that needs no ROS, one behavior per test.
 - `Scripts/setup.sh`, run as `pixi run setup`, builds Cyclone DDS and every message in its `PACKAGES` into `ThirdParty/`. That directory is generated and ignored; don't edit it.
 - `Scripts/idl.py` rewrites the IDL that ROS ships in the pixi environment (`share/<pkg>/msg/`) under the names ROS 2 uses on the wire, and writes `RosMessages.h`. Never hand-write message IDL.
@@ -40,7 +41,8 @@ One concept per file, named after the rclcpp or tf2_ros header it copies. Our ty
 - Messages come from Jazzy and are the same on the wire in Humble through Lyrical, except `sensor_msgs/Range`, which gained `variance` after Humble. Lyrical dropped `geometry_msgs/Pose2D`.
 - When one shell's ROS tools see nothing while others do, suspect that shell, not Unreal. On 2026-09-26 a fresh shell fixed exactly that. A healthy participant answers a new participant's multicast hello within milliseconds. `tcpdump` shows the multicast on `en0` and the replies on `lo0`, and needs no sudo on Alvaro's Mac.
 - UE 5.8's build accelerator (UBA) loses the object files when the plugin folder is a symlink, and the link fails with `no such file or directory`. The host project turns it off with `bAllowUBAExecutor` set to false in its own `Saved/UnrealBuildTool/BuildConfiguration.xml`. `AdditionalPluginDirectories` is no way around it, since it only finds plugins one folder down and this repo is the plugin folder.
-- Game time in the headless run below went about five times faster than the wall clock (170 `HelloRos` messages in 30 seconds), so don't read timing from that mode.
+- Every game instance publishes its own `/clock`, so several PIE clients on one domain give ROS several clocks. Game time starts from zero on each Play and level load, which ROS nodes see as time jumping back.
+- Game time in a headless run goes about six times faster than the wall clock. Frames there beat 2000 fps, and Unreal counts each as at least `MinUndilatedFrameTime`, 0.5 ms in the engine's `BaseGame.ini`. `Checks/clock.py` prints the ratio. Don't read timing from that mode.
 
 ## Verifying changes
 
@@ -63,6 +65,13 @@ pixi run env RMW_IMPLEMENTATION=rmw_fastrtps_cpp ros2 run demo_nodes_cpp listene
 ```
 
 Every pixi environment sets `RMW_IMPLEMENTATION=rmw_cyclonedds_cpp` over the shell's value, hence `env` after activation. Unreal never shows in `ros2 node list`, since it isn't a node. Its endpoints appear in `pixi run ros2 topic info /chatter -v` under `_CREATED_BY_BARE_DDS_APP_`. The first `ros2 topic` call starts the ROS daemon and can answer before it has discovered Unreal, so run it twice or add `--no-daemon --spin-time 3`.
+
+Checks with a Python side run through `Checks/run.sh`. It starts the checker, then the check actor in a headless Unreal on `ROS_DOMAIN_ID` 57, and exits with the checker's status. Every line should say PASS. The pixi environment and RMW go third and fourth, and `HOST` points it at another project:
+
+```sh
+sh Checks/run.sh ClockCheck clock.py
+sh Checks/run.sh ClockCheck clock.py default rmw_fastrtps_cpp
+```
 
 Repeat against the other distros with `-e humble`, `-e kilted` and `-e lyrical` after `pixi run`. Lyrical's `demo_nodes_cpp` uses `example_interfaces/msg/String` instead of `std_msgs/msg/String`; its nodes still reach Unreal on Cyclone but not on Fast DDS. Test Lyrical with `pixi run -e lyrical ros2 topic echo /chatter std_msgs/msg/String` and `ros2 topic pub` instead. On 2026-09-26 all four distros passed both ways on both RMWs.
 

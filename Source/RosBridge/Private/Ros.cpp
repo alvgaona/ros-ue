@@ -15,10 +15,13 @@ void URos::Initialize(FSubsystemCollectionBase&)
 	// 0 when unset, same as ROS
 	const int32 Domain = FCString::Atoi(*FPlatformMisc::GetEnvironmentVariable(TEXT("ROS_DOMAIN_ID")));
 	Participant = dds_create_participant(Domain, nullptr, nullptr);
+	Clock = MakeUnique<ros::Clock>(*GetGameInstance(), ros::Publisher<rosgraph_msgs::msg::Clock>(
+		CreatePublisher(TEXT("/clock"), ros::TypeSupportOf<rosgraph_msgs::msg::Clock>(), ros::Qos::Reliable)));
 }
 
 void URos::Deinitialize()
 {
+	Clock.Reset();
 	dds_delete(Participant); // also deletes every topic, reader and writer under it
 }
 
@@ -33,6 +36,11 @@ ros::Subscription URos::CreateSubscription(const FString& Topic, const ros::Type
 	const TSharedRef<ros::Reader> Reader = MakeShared<ros::Reader>(Entity, MoveTemp(Callback));
 	Spinning.Add(Reader);
 	return ros::Subscription(Reader);
+}
+
+builtin_interfaces::msg::Time URos::Now() const
+{
+	return Clock ? Clock->Now() : builtin_interfaces::msg::Time{};
 }
 
 dds_entity_t URos::MakeTopic(const ros::TypeSupport& Type, const FString& Topic)

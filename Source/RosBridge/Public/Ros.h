@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Tickable.h"
+#include "RosClock.h"
 #include "RosPublisher.h"
 #include "RosQos.h"
 #include "RosSubscription.h"
@@ -23,6 +24,7 @@ public:
 
 	ros::PublisherBase CreatePublisher(const FString& Topic, const ros::TypeSupport& Type, ros::Qos Profile);
 	ros::Subscription CreateSubscription(const FString& Topic, const ros::TypeSupport& Type, ros::Qos Profile, TFunction<void(const void*)> Callback);
+	builtin_interfaces::msg::Time Now() const;
 
 	virtual void Initialize(FSubsystemCollectionBase&) override;
 	virtual void Deinitialize() override;
@@ -37,6 +39,7 @@ private:
 	dds_entity_t MakeTopic(const ros::TypeSupport& Type, const FString& Topic);
 
 	dds_entity_t Participant = 0;
+	TUniquePtr<ros::Clock> Clock;
 	TArray<TWeakPtr<ros::Reader>> Spinning;
 };
 
