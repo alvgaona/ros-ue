@@ -27,10 +27,14 @@ These run Jazzy. Add `-e humble`, `-e kilted` or `-e lyrical` after `pixi run` t
 
 On macOS, ROS only sees the editor if it has Local Network access (System Settings → Privacy & Security → Local Network). An editor started from a terminal uses the terminal's access instead.
 
-## Adding a message type
+## Message types
 
-`pixi run setup` generates every message in the packages listed in `setup.sh`, from the IDL that ROS Jazzy ships in the default pixi environment. To use one, add `#include "<pkg>_<Type>.h"` and a `ROS_MESSAGE` line to `Source/RosBridge/Public/RosMessages.h`.
+`pixi run setup` generates every message in the packages listed in `Scripts/setup.sh`, from the IDL that ROS Jazzy ships in the default pixi environment. Include `RosMessages.h` and use them under their ROS 2 names, as in rclcpp:
+
+```cpp
+RosPublisher<geometry_msgs::msg::Twist> Publisher = Ros->CreatePublisher<geometry_msgs::msg::Twist>(TEXT("/cmd_vel"));
+```
 
 The messages match the other distros on the wire, except `sensor_msgs/Range`, which has no `variance` field in Humble.
 
-For a package that isn't listed, run `pixi add --feature jazzy ros-jazzy-<pkg>`, add it to `PACKAGES` in `setup.sh` and run `pixi run setup` again.
+For a package that isn't listed, run `pixi add --feature jazzy ros-jazzy-<pkg>`, add it to `PACKAGES` in `Scripts/setup.sh` and run `pixi run setup` again.

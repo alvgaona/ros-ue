@@ -2,12 +2,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Ros.h"
 #include "RosMessages.h"
 #include "HelloRos.generated.h"
 
 // Talker and listener on /chatter, like ROS's demo_nodes_cpp. Drop one in a level and press Play.
 UCLASS()
-class ROSBRIDGE_API AHelloRos : public AActor
+class AHelloRos : public AActor
 {
 	GENERATED_BODY()
 
@@ -18,8 +19,8 @@ protected:
 private:
 	void Talk();
 
-	TSharedPtr<TPublisher<FStringMsg>> Publisher;
-	TSharedPtr<TSubscription<FStringMsg>> Subscription;
+	RosPublisher<std_msgs::msg::String> Publisher;
+	RosSubscription Subscription;
 	FTimerHandle Timer;
 	int32 Count = 0;
 };

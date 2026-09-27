@@ -18,7 +18,7 @@ git = ">=2.55.0,<3"
 channels = ["https://prefix.dev/robostack-jazzy"]
 
 [feature.jazzy.tasks]
-setup = "sh setup.sh"
+setup = "sh Scripts/setup.sh"
 
 [feature.jazzy.dependencies]
 ros-jazzy-demo-nodes-cpp = ">=0.33.11,<0.34"
