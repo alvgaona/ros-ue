@@ -1,6 +1,8 @@
 # ros-ue
 
 [![CI](https://github.com/alvgaona/ros-ue/actions/workflows/ci.yaml/badge.svg)](https://github.com/alvgaona/ros-ue/actions/workflows/ci.yaml)
+![Version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Falvgaona%2Fros-ue%2Fmain%2FRosBridge.uplugin&query=%24.VersionName&label=version&prefix=v&color=blue)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue)](LICENSE)
 ![Unreal Engine 5](https://img.shields.io/badge/Unreal_Engine-5-313131?logo=unrealengine&logoColor=ffffff)
 ![ROS 2](https://img.shields.io/badge/ROS_2-Humble_%7C_Jazzy_%7C_Kilted_%7C_Lyrical-22314e?logo=ros&logoColor=ffffff)
 
@@ -17,21 +19,9 @@ Unreal Engine 5 plugin that talks to ROS 2 over DDS without being a ROS 2 node. 
 - Linux on x86_64.
 - Windows is coming soon.
 
-## Build from source
+## Install
 
-You need [pixi](https://pixi.sh) and the compiler Unreal uses (Xcode on macOS, clang on Linux). Clone into your project's `Plugins/` folder and build the dependencies:
-
-```sh
-git clone https://github.com/alvgaona/ros-ue.git "<YourProject>/Plugins/RosBridge"
-cd "<YourProject>/Plugins/RosBridge"
-pixi run setup   # builds Cyclone DDS and the ROS message types into ThirdParty/
-```
-
-Then add the modules you use to your module's `.Build.cs` and open the project, which builds the plugin:
-
-```csharp
-PublicDependencyModuleNames.AddRange(new[] { "RosBridge", "RosSim" });
-```
+[INSTALL.md](INSTALL.md) covers installing from a release or from source, and using the plugin from C++.
 
 ## Hello world
 
@@ -64,3 +54,7 @@ AI tools are welcome, and [`AGENTS.md`](AGENTS.md) is written for them. Outside 
 - Understand every line you submit. If you can't explain how your change works with the rest of the plugin without an AI's help, don't send it.
 - Review and edit AI-written issues and PR descriptions before posting. Cut the noise.
 - No AI-generated images, video or audio.
+
+## License
+
+[Apache 2.0](LICENSE).
