@@ -19,9 +19,11 @@ One concept per file, named after the rclcpp or tf2_ros header it copies. Our ty
 - `Source/RosBridge/Public/Ros.h` has `URos`, the game-instance subsystem that owns the DDS participant, creates publishers and subscriptions from type support, and spins them. After it come `ros::CreatePublisher<T>` and `ros::CreateSubscription<T>`, which find the `URos` of their world-context object's game instance and pass the message's type support on. `Private/Ros.cpp` does the work and names topics. `LogRos` is declared here.
 - `RosPublisher.h` has `ros::Publisher<T>`, a handle that only adds a typed `Publish` to `ros::PublisherBase`, which owns a DDS writer. `RosSubscription.h` has `ros::Subscription`, a handle to a `ros::Reader`, which owns a DDS reader and runs the take loop. Neither side is a template underneath, since `ros::CreateSubscription<T>` wraps the typed callback.
 - `RosQos.h` has `ros::Qos`. `Private/RosQos.cpp` builds each profile when an endpoint is created, with the type hash in USER_DATA.
+- `RosConversions.h` turns Unreal values into ROS messages: centimeters to meters with Y flipped, rotations mirrored to match, and game time to `builtin_interfaces::msg::Time`. Unreal's axes and units can't be configured (World to Meters only scales VR), and Epic's GeoReferencing plugin converts the same way.
 - `RosTypeSupport.h` has `ROS_MESSAGE`, which gives a generated message struct its DDS descriptor and ROS 2 type hash. It is the only header without a `.cpp`.
 - `RosMessages.h` is generated into `ThirdParty/msgs/`. It gives every generated message its ROS 2 C++ name (`std_msgs::msg::String`) and registers it with `ROS_MESSAGE`, so there's nothing to register by hand.
 - `Private/Checks/HelloRos` is `demo_nodes_cpp`'s talker and listener in one actor, and the end-to-end check. Actors that only exist for checks go in `Private/Checks/`.
+- `Private/Tests/` has automation tests for code that needs no ROS, one behavior per test.
 - `Scripts/setup.sh`, run as `pixi run setup`, builds Cyclone DDS and every message in its `PACKAGES` into `ThirdParty/`. That directory is generated and ignored; don't edit it.
 - `Scripts/idl.py` rewrites the IDL that ROS ships in the pixi environment (`share/<pkg>/msg/`) under the names ROS 2 uses on the wire, and writes `RosMessages.h`. Never hand-write message IDL.
 
@@ -42,14 +44,17 @@ One concept per file, named after the rclcpp or tf2_ros header it copies. Our ty
 
 ## Verifying changes
 
-There is no test suite. The host project on Alvaro's machine is `~/Documents/Unreal Projects/RosBridgeHost`, a blank C++ project with this repo symlinked as `Plugins/RosBridge`. Build it from the command line, then run the hello world without a window:
+The host project on Alvaro's machine is `~/Documents/Unreal Projects/RosBridgeHost`, a blank C++ project with this repo symlinked as `Plugins/RosBridge`. If his editor has it open, copy the project and the plugin under `/private/tmp` and work there instead; `/tmp` is a symlink, which UBA can't handle. Build from the command line, run the automation tests, then run the hello world without a window:
 
 ```sh
 UE="/Users/Shared/Epic Games/UE_5.8/Engine"
 HOST="$HOME/Documents/Unreal Projects/RosBridgeHost/RosBridgeHost.uproject"
 "$UE/Build/BatchFiles/Mac/Build.sh" RosBridgeHostEditor Mac Development -Project="$HOST"
+"$UE/Binaries/Mac/UnrealEditor.app/Contents/MacOS/UnrealEditor" "$HOST" -ExecCmds="Automation RunTests RosBridge" -testexit="Automation Test Queue Empty" -unattended -nullrhi -nosplash -stdout
 "$UE/Binaries/Mac/UnrealEditor.app/Contents/MacOS/UnrealEditor" "$HOST" /Engine/Maps/Entry -game -nullrhi -unattended -stdout -ExecCmds="summon /Script/RosBridge.HelloRos"
 ```
+
+Each automation test logs `Test Completed. Result={Success}` with its name.
 
 While it runs, `pixi run listener` should print Unreal's messages, and messages from `pixi run talker` should show up in Unreal's log as `I heard`. Fast DDS is supported too, so repeat both against it:
 
