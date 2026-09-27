@@ -34,6 +34,7 @@ ros-jazzy-tf2-msgs = ">=0.36.22,<0.37"
 ros-jazzy-rosgraph-msgs = ">=2.0.4,<3"
 ros-jazzy-rcl-interfaces = ">=2.0.4,<3"
 ros-jazzy-tf2-ros-py = ">=0.36.22,<0.37"
+ros-jazzy-rviz2 = ">=14.1.23,<15"
 
 [feature.humble]
 channels = ["https://prefix.dev/robostack-humble"]
