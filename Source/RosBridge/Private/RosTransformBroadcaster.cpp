@@ -38,7 +38,7 @@ namespace ros
 			const FString Parent = FrameId(Each.Parent);
 			const FString Child = FrameId(Each.Child);
 			// tf2 would drop it on the ROS side, where nobody in Unreal sees the error
-			if (!ensureMsgf(!Parent.IsEmpty() && !Child.IsEmpty() && Parent != Child, TEXT("Not sending transform from '%s' to '%s': tf2 needs two different frame ids"), *Each.Parent, *Each.Child))
+			if (!ensureMsgf(!Parent.IsEmpty() && !Child.IsEmpty() && !Parent.Equals(Child, ESearchCase::CaseSensitive), TEXT("Not sending transform from '%s' to '%s': tf2 needs two different frame ids"), *Each.Parent, *Each.Child))
 				continue;
 			Transforms.Add({ { Stamp, Utf8(Parent) }, Utf8(Child), ToTransform(Each.Transform) });
 		}
