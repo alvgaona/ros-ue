@@ -53,3 +53,4 @@ jobs:
         with:
           body: ${{ steps.changelog.outputs.content }}
           files: dist/*.zip
+          prerelease: ${{ contains(github.ref_name, '-') }}

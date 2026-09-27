@@ -11,7 +11,7 @@ Hosted runners have no Unreal, so the plugin itself is only built and checked lo
 
 [`release.yaml`](release.yaml) runs when a `v*` tag is pushed. A macOS job runs `pixi run setup` and `pixi run package`, which zips the plugin with Cyclone DDS, the message types and their licenses prebuilt as `ros-ue-<version>-macos-arm64.zip` ([`Scripts/package.sh`](../../Scripts/package.sh), [`Scripts/licenses`](../../Scripts/licenses/README.md)). The release job then fails unless the tag is `v` plus `VersionName` from `RosBridge.uplugin`, and creates a GitHub release with the zip attached, whose notes git-cliff builds from the conventional commits since the previous tag ([`cliff.toml`](../../cliff.toml)).
 
-Run it by hand from the Actions tab to build the zip without releasing: it lands as a workflow artifact instead.
+Run it by hand from the Actions tab to build the zip without releasing: it lands as a workflow artifact instead. A tag with a suffix, such as `v0.2.0-rc1`, makes a prerelease, which GitHub doesn't show as the latest release.
 
 To cut one, bump `VersionName` and `Version` in `RosBridge.uplugin`, merge it, then tag that commit:
 
