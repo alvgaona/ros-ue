@@ -19,8 +19,8 @@ protected:
 private:
 	void Talk();
 
-	RosPublisher<std_msgs::msg::String> Publisher;
-	RosSubscription Subscription;
+	ros::Publisher<std_msgs::msg::String> Publisher;
+	ros::Subscription Subscription;
 	FTimerHandle Timer;
 	int32 Count = 0;
 };

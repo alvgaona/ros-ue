@@ -32,7 +32,7 @@ On macOS, ROS only sees the editor if it has Local Network access (System Settin
 `pixi run setup` generates every message in the packages listed in `Scripts/setup.sh`, from the IDL that ROS Jazzy ships in the default pixi environment. Include `RosMessages.h` and use them under their ROS 2 names, as in rclcpp:
 
 ```cpp
-RosPublisher<geometry_msgs::msg::Twist> Publisher = Ros->CreatePublisher<geometry_msgs::msg::Twist>(TEXT("/cmd_vel"));
+ros::Publisher<geometry_msgs::msg::Twist> Publisher = ros::CreatePublisher<geometry_msgs::msg::Twist>(this, TEXT("/cmd_vel"));
 ```
 
 The messages match the other distros on the wire, except `sensor_msgs/Range`, which has no `variance` field in Humble.

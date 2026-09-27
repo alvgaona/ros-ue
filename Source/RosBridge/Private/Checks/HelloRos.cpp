@@ -1,13 +1,11 @@
 #include "HelloRos.h"
-#include "Engine/GameInstance.h"
 #include "TimerManager.h"
 
 void AHelloRos::BeginPlay()
 {
 	Super::BeginPlay();
-	URos* Ros = UGameInstance::GetSubsystem<URos>(GetGameInstance());
-	Publisher = Ros->CreatePublisher<std_msgs::msg::String>(TEXT("/chatter"));
-	Subscription = Ros->CreateSubscription<std_msgs::msg::String>(TEXT("/chatter"), [](const std_msgs::msg::String& Msg)
+	Publisher = ros::CreatePublisher<std_msgs::msg::String>(this, TEXT("/chatter"));
+	Subscription = ros::CreateSubscription<std_msgs::msg::String>(this, TEXT("/chatter"), [](const std_msgs::msg::String& Msg)
 	{
 		UE_LOG(LogRos, Log, TEXT("I heard: [%s]"), UTF8_TO_TCHAR(Msg.data));
 	});
