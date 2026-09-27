@@ -65,9 +65,9 @@ run = f"{width}x{height}, {qos_name} QoS"
 wrong = [s for s, _, exact in images if not exact]
 ok = [verdict(f"1a every image arrives exact ({run})", bool(images) and not wrong, f"{len(images)} images, {len(wrong)} wrong")]
 
-# Stamps past our newest /clock sample can't be compared yet
+# Stamps outside the /clock samples we heard can't be compared
 known = set(clock)
-checked = [s for s, _, _ in images if s <= max(clock, default=0)]
+checked = [s for s, _, _ in images if min(clock, default=0) <= s <= max(clock, default=0)]
 ok.append(verdict("1b every stamp is a /clock value", bool(checked) and all(s in known for s in checked), f"{len(checked)} stamps"))
 
 # ImageCheck sends one every 1/30 s of sim time, so the first and last stamps say how many went out meanwhile

@@ -62,9 +62,9 @@ try:
 except Exception as e:
     ok.append(verdict(name, False, e))
 
-# /tf stamps past our newest /clock sample can't be compared yet
+# /tf stamps outside the /clock samples we heard can't be compared
 known = set(clock)
-stamps = [s for poses in frames.values() for s in poses if s <= max(clock, default=0)]
+stamps = [s for poses in frames.values() for s in poses if min(clock, default=0) <= s <= max(clock, default=0)]
 ok.append(verdict("3b every /tf stamp is a /clock value", bool(stamps) and all(s in known for s in stamps), f"{len(stamps)} stamps"))
 
 errors = [max(abs(v.translation.x), abs(v.translation.y + s / 1e9), abs(v.translation.z), yaw_error(v.rotation, 0)) for s, v in slide.items()]
