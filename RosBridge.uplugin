@@ -6,16 +6,19 @@
   "Description": "Talks to ROS 2 over DDS without being a ROS 2 node.",
   "Category": "Robotics",
   "CanContainContent": false,
+  "SupportedTargetPlatforms": [ "Mac", "Linux" ],
   "Modules": [
     {
       "Name": "RosBridge",
       "Type": "Runtime",
-      "LoadingPhase": "Default"
+      "LoadingPhase": "Default",
+      "PlatformAllowList": [ "Mac", "Linux" ]
     },
     {
       "Name": "RosBridgeChecks",
       "Type": "UncookedOnly",
-      "LoadingPhase": "Default"
+      "LoadingPhase": "Default",
+      "PlatformAllowList": [ "Mac", "Linux" ]
     }
   ]
 }

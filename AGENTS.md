@@ -10,7 +10,7 @@ Unreal Engine 5 plugin, `RosBridge`, that talks to ROS 2 as a plain Cyclone DDS 
 - Callbacks run on the game thread because `URos::Tick` drains every reader each frame. Don't move them to DDS listeners, which fire on Cyclone's threads.
 - Cyclone DDS is linked statically and pinned in `Scripts/setup.sh` to 0.10.5, the release Humble, Jazzy and Kilted ship. Lyrical ships Cyclone 11, which talks to it fine.
 - `pixi.toml` has one environment per distro. The default is Jazzy, the source of the generated messages, so `setup` exists only there; Humble ships no type hashes, which `idl.py` needs. `humble`, `kilted` and `lyrical` are test peers only.
-- macOS arm64 and Linux x86_64 only, the platforms in `pixi.toml`.
+- macOS arm64 and Linux x86_64 only, the platforms in `pixi.toml` and `RosBridge.uplugin`.
 
 ## Layout
 
