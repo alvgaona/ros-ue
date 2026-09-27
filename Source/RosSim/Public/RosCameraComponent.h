@@ -10,7 +10,7 @@ namespace ros { class CameraStream; }
 // Publishes what it sees as sensor_msgs/Image in bgr8, FrameRate times per second of sim time, each image stamped with the
 // sim time it was captured at. The GPU copies each image back while the game runs on, and a worker thread publishes it.
 UCLASS(ClassGroup = Ros, meta = (BlueprintSpawnableComponent))
-class ROSBRIDGE_API URosCameraComponent : public USceneCaptureComponent2D
+class ROSSIM_API URosCameraComponent : public USceneCaptureComponent2D
 {
 	GENERATED_BODY()
 

@@ -11,6 +11,12 @@
     {
       "Name": "RosBridge",
       "Type": "Runtime",
+      "LoadingPhase": "Default",
+      "PlatformAllowList": [ "Mac", "Linux" ]
+    },
+    {
+      "Name": "RosSim",
+      "Type": "Runtime",
       "LoadingPhase": "PostConfigInit",
       "PlatformAllowList": [ "Mac", "Linux" ]
     },

@@ -2,6 +2,8 @@
 
 Unreal Engine 5 plugin that talks to ROS 2 over DDS without being a ROS 2 node. Publishers and subscriptions work like rclcpp, and callbacks run on the game thread.
 
+It has two modules. RosBridge is the ROS 2 client: publishers, subscriptions, the clock and TF. RosSim adds the components that take real work to build on top of it, a camera for now. Anything else, from an IMU to a vehicle, you model yourself and publish through RosBridge.
+
 Topics work with ROS 2 Humble, Jazzy, Kilted and Lyrical, running either Cyclone DDS or Fast DDS. ROS on rmw_zenoh can't see the plugin, since Zenoh isn't DDS. Only macOS and Linux are wired up.
 
 ## Setup
@@ -12,7 +14,7 @@ You need [pixi](https://pixi.sh) and the compiler Unreal uses (Xcode on macOS, c
 pixi run setup   # builds Cyclone DDS and the ROS message types as static libraries into ThirdParty/
 ```
 
-Put this folder in a C++ project's `Plugins/` folder (for example `Plugins/RosBridge`), open the project and let it build.
+Put this folder in a C++ project's `Plugins/` folder (for example `Plugins/RosBridge`), open the project and let it build. To use it from C++, add `RosBridge` to your module's dependencies in its `.Build.cs`, and `RosSim` too for the camera.
 
 ## Hello world
 
